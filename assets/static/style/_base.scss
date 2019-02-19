@@ -1,0 +1,119 @@
+html {
+  font-size: d-vw($base_rem);
+}
+@media (min-width: $desktop_layout_width * 1px) {
+  html {
+    font-size: $base_rem;
+  }
+}
+@media (max-width: 768px) {
+  html {
+    font-size: m-vw($base_rem);
+  }
+}
+
+.wrap {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+header {
+  min-height: rem(100px);
+}
+main {
+  //min-height: rem(300px);
+}
+footer {
+  min-height: rem(100px);
+}
+
+.container {
+  width: 100%;
+  max-width: $desktop_layout_width * 1px;
+  margin: 0 auto;
+}
+
+//* *************** */
+*{
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+img {
+  border: none;
+  max-width: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+.clear {
+  clear: both;
+}
+
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+  clear: both;
+}
+
+.tc {
+  text-align: center;
+}
+
+.tr {
+  text-align: right;
+}
+
+.tl {
+  text-align: left;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.rel {
+  position: relative;
+}
+.pab{
+  position: absolute;
+}
+.pc-view {
+  display: block!important;
+}
+
+.mobile-view {
+  display: none!important;
+}
+
+@media (max-width: 768px) {
+  .pc-view {
+    display: none!important;
+  }
+
+  .mobile-view {
+    display: block!important;
+  }
+
+  .container {
+    font-size: rem(34px);
+  }
+
+}
+
+body {
+    font-family: "PingFang HK", "SourceHanSansTWHK-Light", "Microsoft JhengHei", Helvetica, "Helvetica Neue" , Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+}

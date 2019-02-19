@@ -1,0 +1,12 @@
+.page-index {
+    min-height: rem(550px);
+    text-align: center;
+    
+    background: url(../images/common/bg.jpg) repeat;
+    
+    color: #ff0000;
+    
+    &:before {
+        content: "Hello~";
+    }
+}

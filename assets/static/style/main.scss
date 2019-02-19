@@ -1,0 +1,9 @@
+@import "../../../node_modules/normalize-scss/sass/normalize";
+@include normalize();
+@import "common";
+
+@import "base";
+@import "head";
+
+@import "page-index";
+
