@@ -7,6 +7,13 @@ MM 中型项目 `html` 模版
 - 准备好 [NodeJS](https://nodejs.org/dist/v8.9.1/node-v8.9.1-x64.msi)  环境。
 - 准备好编译环境，在项目根目录执行 `npm install`。
 
+## 文件目录结构
+
+- `assets`， 存放所有的 `images` 、 `fonts`、`css`、`js`  等资源文件。
+- `assets/common`，存放所有的第三方`js`组件。
+- `assets/static`，存放所有的 `images` 、 `fonts`、`css` 等资源文件。
+- `assets/default`，存放项目`js`文件。
+
 
 ## 开发服务器
 
@@ -39,11 +46,27 @@ MM 中型项目 `html` 模版
 scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
 
+
+
 ## 打包中文字体
 
 `gulp font` 命令会将`assets/static/fonts/src`文件中使用过的中文字体压缩到`assets/static/fonts`目录下，
 
 **中文源字体请放到 `assets/static/fonts/src` 目录下**。
+
+
+
+## 脚手架
+
+- `npm run create` 命令用于创建对应的页面`javascript` 文件，请使用默认命名空间 `default`。
+
+脚手架默认包含3个`js`模版
+
+- `page`，页面js模版
+- `service`，用于处理页面`ajax`访问操作。
+- `component`，`VueJS` 组件
+
+
 
 ## 项目打包
 

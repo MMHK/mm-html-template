@@ -489,8 +489,17 @@ ul {
     font-size: 1.41667rem; } }
 
 body {
-  font-family: "PingFang HK", "SourceHanSansTWHK-Light", "Microsoft JhengHei", Helvetica, "Helvetica Neue" , Arial, sans-serif;
+  font-family: Helvetica, Arial, "MHeiHK-Medium", "PingFang HK", "SourceHanSansTWHK-Light", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
   -webkit-text-size-adjust: 100%; }
+
+@font-face {
+  font-family: "MHeiHK-Medium";
+  src: url("../fonts/MHeiHK-Medium.eot");
+  /* IE9 */
+  src: url("../fonts/MHeiHK-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/MHeiHK-Medium.woff") format("woff"), url("../fonts/MHeiHK-Medium.ttf") format("truetype"), url("../fonts/MHeiHK-Medium.svg#MHeiHK-Medium") format("svg");
+  /* iOS 4.1- */
+  font-style: normal;
+  font-weight: normal; }
 
 .page-index {
   min-height: 22.91667rem;
