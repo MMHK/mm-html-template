@@ -244,12 +244,14 @@ gulp.task("build",function () {
         }));
 });
 
-gulp.task("dist", ["build", "html", "sass"], function(){
+gulp.task("copy", function(){
     gulp.src([
         "./assets/default/main.min.*"
     ])
     .pipe(gulp.dest("./dist/assets/default/"));
 });
+
+
 
 //ssi 编译处理
 var ssiHandler = function(options) {
@@ -324,7 +326,7 @@ gulp.task("static", function () {
         })
 });
 
-gulp.task("html", ["static"], function () {
+gulp.task("html",  function () {
     return gulp.src("./*.html")
         .pipe(ssiHandler({
             baseDir: "./"
@@ -344,15 +346,15 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('./assets/static/style/'));
 });
 
-gulp.task('sass:watch', function () {
-    gulp.watch('./assets/static/style/*.scss', ['sass']);
+gulp.task('sass:watch', () => {
+    return gulp.watch('./assets/static/style/*.scss', gulp.parallel("sass"));
 });
 /**
  * 开发服务器
  */
-gulp.task("dev", ["sass", "sass:watch"],function (cb) {
+gulp.task("serve", async ()=> {
 
-    gulp.src('./')
+    return await gulp.src('./')
         .pipe(webserver({
             livereload: true,
             directoryListing: true,
@@ -366,7 +368,10 @@ gulp.task("dev", ["sass", "sass:watch"],function (cb) {
         }));
 });
 
-
+/**
+ * 打包前端
+ */
+gulp.task("dist", gulp.series("build", gulp.parallel("html", "sass"), "copy"));
 
 //开发脚手架
-gulp.task("default", ["dev"]);
+gulp.task("default", gulp.series("sass", gulp.parallel("sass:watch", "serve")));
