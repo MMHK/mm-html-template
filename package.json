@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "serve": "gulp dev",
+    "serve": "gulp default",
     "create": "gulp generator",
-    "dist": "gulp dist"
+    "dist": "gulp dist",
+    "font": "gulp font"
   },
   "author": "Mixmedia",
   "license": "Apache-2.0",
@@ -39,5 +40,9 @@
   },
   "dependencies": {
     "normalize-scss": "^7.0.1"
-  }
+  },
+  "browserslist": [
+    "last 5 version",
+    "> .5%"
+  ]
 }
