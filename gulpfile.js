@@ -18,7 +18,8 @@ var replace = require('gulp-replace');
 var uglify = require('gulp-uglify');
 var glob = require("glob");
 var path = require("path");
-var prompt = require("gulp-prompt");
+var inquirer = require('inquirer');
+var prompt = inquirer.createPromptModule();
 var rename = require("gulp-rename");
 var modifyCssUrls = require('gulp-modify-css-urls');
 var rjs = require('gulp-requirejs-optimize');
@@ -205,45 +206,45 @@ function beforeRjsbuild(rjsConfig) {
 
 //公共模板生成器 用于生成前台及后台的js模板
 function commonTemplate(basePath) {
-    return new Promise(function (resolve, reject) {
-        gulp.src("*")
-            .pipe(prompt.prompt([{
-                    type: 'list',
-                    name: 'namespace',
-                    message: '请选择存放位置',
-                    choices: glob.sync(__dirname + "/assets/*/").map(function (p) {
-                        return path.basename(p);
-                    }),
-                },
-                {
-                    type: 'list',
-                    name: 'type',
-                    message: '请选择模板类型?',
-                    choices: ['page', 'service', 'component'],
-                },
-                {
-                    type: 'input',
-                    name: 'name',
-                    message: "请填写文件名（不包含路径）",
-                    validate: function (value) {
-                        var reg = /^([0-9a-z\-\/]{1,12})$/i
-                        if (reg.test(value)) {
-                            return true;
-                        }
-                        return '请填写正确的文件名';
-                    }
+
+    return prompt([{
+            type: 'list',
+            name: 'namespace',
+            message: '请选择存放位置',
+            choices: glob.sync(__dirname + "/assets/*/").map(function (p) {
+                return path.basename(p);
+            }),
+        },
+        {
+            type: 'list',
+            name: 'type',
+            message: '请选择模板类型?',
+            choices: ['page', 'service', 'component'],
+        },
+        {
+            type: 'input',
+            name: 'name',
+            message: "请填写文件名（不包含路径）",
+            validate: function (value) {
+                var reg = /^([0-9a-z\-\/]{1,12})$/i
+                if (reg.test(value)) {
+                    return true;
                 }
-            ], function (result) {
-                gulp.src("./assets/common/gulp/" + result.type + ".js")
-                    .pipe(replace("<?= page ?>", result.name))
-                    .pipe(replace("<?= type ?>", result.type))
-                    .pipe(replace("<?= namespace ?>", result.namespace))
-                    .pipe(rename(result.name + (result.type == "component" ? ".vue" : ".js")))
-                    .pipe(gulp.dest([basePath, result.namespace, result.type].join("/") + "/"))
-                    .on("end", function () {
-                        resolve();
-                    })
-            }))
+                return '请填写正确的文件名';
+            }
+        }
+    ]).then(function (result) {
+        return new Promise(function (resolve, reject) {
+            gulp.src("./assets/common/gulp/" + result.type + ".js")
+                .pipe(replace("<?= page ?>", result.name))
+                .pipe(replace("<?= type ?>", result.type))
+                .pipe(replace("<?= namespace ?>", result.namespace))
+                .pipe(rename(result.name + (result.type == "component" ? ".vue" : ".js")))
+                .pipe(gulp.dest([basePath, result.namespace, result.type].join("/") + "/"))
+                .on("end", function () {
+                    resolve();
+                })
+        });
     });
 }
 //js 模板生成器
@@ -255,20 +256,16 @@ gulp.task("generator", function () {
  * 编译前端代码
  */
 gulp.task("build", function (done) {
-    gulp.src("*")
-        .pipe(prompt.prompt([{
-            type: 'list',
-            name: 'namespace',
-            message: '请选择编译目录',
-            choices: glob.sync(__dirname + "/assets/*/").map(function (p) {
-                return path.basename(p);
-            }),
-        }], function (result) {
-            return bundle(__dirname + "/assets", result.namespace)
-                .then(function () {
-                    done();
-                });
-        }));
+    return prompt([{
+        type: 'list',
+        name: 'namespace',
+        message: '请选择编译目录',
+        choices: glob.sync(__dirname + "/assets/*/").map(function (p) {
+            return path.basename(p);
+        }),
+    }]).then(function (result) {
+        return bundle(__dirname + "/assets", result.namespace);
+    });
 });
 
 gulp.task("copy", function () {
