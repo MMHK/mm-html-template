@@ -139,7 +139,6 @@ function rjsCommon(basePath, configPath) {
             .on("end", function () {
                 console.log("bundle amd modules complete");
                 resolve(rjsConfig);
-                return bundleCSS(rjsConfig);
             })
     });
 
