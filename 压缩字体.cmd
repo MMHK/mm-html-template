@@ -1,1 +1,1 @@
-gulp font
+npm run font
