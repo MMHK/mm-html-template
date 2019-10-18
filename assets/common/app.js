@@ -1,38 +1,31 @@
-define(["jquery"], function ($) {
+import $ from 'jquery'
 
-    var app = {};
+let app = (()=>{
+    var page_inited = false;
 
-    if (window['__app__']) {
-        return window['__app__'];
+    console.log(__filename)
+
+    return {
+        render_page(modules) {
+            if (this.page_inited) {
+                return
+            }
+
+            //parse page
+            $("*[data-page]").each((index, ele) => {
+                var $ele = $(ele),
+                    alias =  $ele.data("page");
+
+                $ele.addClass("loading");
+
+                let module = modules[alias];
+                module();
+                $ele.removeClass("loading");
+            });
+
+            this.page_inited = true;
+        }
     }
-    window.__app__ = app;
+})();
 
-    /**
-     * 调用Page script
-     * @type {boolean}
-     */
-    app.page_inited = false;
-    /**
-     * @param String namespace 命名空间
-     */
-    app.render_page = function() {
-        var namespace = arguments.length > 0 ? arguments[0] + "/" : "";
-
-        if (app.page_inited)
-            return;
-        //parse page
-        $("*[data-page]").each(function(index, ele){
-            var $ele = $(ele),
-                alias =  namespace + "page" + "/" + $ele.data("page");
-
-            $ele.addClass("loading");
-
-            require([alias]);
-            $ele.removeClass("loading");
-        });
-
-        app.page_inited = true;
-    };
-
-    return app;
-});
+export default app

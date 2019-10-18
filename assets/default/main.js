@@ -1,4 +1,9 @@
-define("default/main", ["jquery", "app"], function ($, app) {
-    app.render_page("default");
-});
-require(['default/main']);
+import app from "../common/app";
+import index from "./page/index";
+import home from "./page/home";
+const modules = {
+    index,
+    home
+};
+
+app.render_page(modules);

@@ -1,7 +1,6 @@
-define([
-    "jquery"
-], function($){
+import $ from 'jquery'
 
+export default () => {
     var $text = $("#text_span"),
         counter = 0;
     
@@ -9,4 +8,4 @@ define([
         counter++;
         $text.text(counter);
     }, 1000);
-});
+}
