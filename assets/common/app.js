@@ -3,8 +3,6 @@ import $ from 'jquery'
 let app = (()=>{
     var page_inited = false;
 
-    console.log(__filename)
-
     return {
         render_page(modules) {
             if (this.page_inited) {

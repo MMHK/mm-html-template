@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const glob = require("glob");
 const path = require("path");
 const autoprefixer = require('autoprefixer');
+
 /*
  * SplitChunksPlugin is enabled by default and replaced
  * deprecated CommonsChunkPlugin. It automatically identifies modules which
@@ -19,6 +20,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 /*
  * We've enabled HtmlWebpackPlugin for you! This generates a html
@@ -47,7 +49,16 @@ module.exports = {
 
 	output: {
 		path: path.resolve(__dirname, 'dist'),
+		chunkFilename: 'js/[name].js',
 		filename: 'js/[name].js',
+	},
+
+	resolve: {
+		alias: {
+			'vue$': (process.env.NODE_ENV === 'development' ? 
+			"vue/dist/vue.esm.js" : 
+			"vue/dist/vue.min.js"),
+		}
 	},
 
 	plugins: [new webpack.ProgressPlugin(),
@@ -74,6 +85,8 @@ module.exports = {
 	}),
 
 	new CleanWebpackPlugin(),
+
+	new VueLoaderPlugin(),
 
 	].concat(HTMlEntryList),
 
@@ -168,7 +181,18 @@ module.exports = {
 			{
 				test:require.resolve('jquery'),
 				use:'expose-loader?$'
-			}
+			},
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader'
+			},
+			{
+				test: /\.css$/,
+				use: [
+					'vue-style-loader',
+					'css-loader'
+				]
+			},
 		]
 	},
 
@@ -176,8 +200,10 @@ module.exports = {
 		splitChunks: {
 			cacheGroups: {
 				vendors: {
-					priority: -10,
-					test: /[\\/]node_modules[\\/]/
+					name: 'vendor',
+					chunks: 'initial',
+					test: /node_modules/,
+					priority: 10,
 				}
 			},
 
@@ -191,7 +217,7 @@ module.exports = {
 		minimize: process.env.NODE_ENV !== 'development',
 	},
 
-	devtool: "source-map",
+	// devtool: "source-map",
 	watch: process.env.NODE_ENV === 'development',
 	watchOptions: {
 		ignored: /node_modules/
@@ -200,5 +226,12 @@ module.exports = {
 		open: true,
 		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
+		proxy: {
+            "/api": {
+				target: "https://baconipsum.com/api",
+				secure: false,
+    			changeOrigin: true,
+            }
+        },
 	}
 };

@@ -7,6 +7,15 @@
     color: #ff0000;
     
     &:before {
-        content: "Hello~!12323423423";
+        content: "This is Home Page";
+    }
+
+    ul > li {
+        margin: 1em 0;
+    }
+
+    a {
+        color: blue;
+        text-decoration: underline;
     }
 }
