@@ -58,7 +58,11 @@ module.exports = {
 			'vue$': (process.env.NODE_ENV === 'development' ? 
 			"vue/dist/vue.esm.js" : 
 			"vue/dist/vue.min.js"),
-		}
+		},
+		modules: [
+			"node_modules",
+			"assets",
+		]
 	},
 
 	plugins: [new webpack.ProgressPlugin(),
@@ -113,6 +117,9 @@ module.exports = {
 					},
 					{
 						loader: 'import-glob'
+					},
+					{
+						loader: path.resolve('./assets/common/amd-loader')
 					}
 				],
 				
