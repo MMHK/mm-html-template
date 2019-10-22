@@ -116,7 +116,7 @@ module.exports = {
 						}
 					},
 					{
-						loader: 'import-glob'
+						loader: path.resolve('./assets/common/glob-loader')
 					},
 					{
 						loader: path.resolve('./assets/common/amd-loader')
