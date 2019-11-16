@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const glob = require("glob");
 const path = require("path");
+const fs = require("fs");
 const autoprefixer = require('autoprefixer');
 
 /*
@@ -21,6 +22,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const FontminPlugin = require('fontmin-webpack')
 
 /*
  * We've enabled HtmlWebpackPlugin for you! This generates a html
@@ -38,6 +40,17 @@ const HTMlEntryList = glob.sync("./views/*.html").map((ele) => {
 		hash: true
 	})
 });
+
+const getFontmin = () => {
+	let charList = glob.sync(path.join(__dirname, "/views/*")).map((file) => {
+		return fs.readFileSync(file)
+	})
+	
+	return new FontminPlugin({
+		autodetect: true, // automatically pull unicode characters from CSS
+		glyphs: Buffer.concat(charList).toString('utf-8').split(""),
+	})
+}
 
 
 module.exports = {
@@ -58,11 +71,7 @@ module.exports = {
 			'vue$': (process.env.NODE_ENV === 'development' ? 
 			"vue/dist/vue.esm.js" : 
 			"vue/dist/vue.min.js"),
-		},
-		modules: [
-			"node_modules",
-			"assets",
-		]
+		}
 	},
 
 	plugins: [new webpack.ProgressPlugin(),
@@ -92,6 +101,8 @@ module.exports = {
 
 	new VueLoaderPlugin(),
 
+	getFontmin(),
+
 	].concat(HTMlEntryList),
 
 	module: {
@@ -114,12 +125,6 @@ module.exports = {
 								]
 							]
 						}
-					},
-					{
-						loader: path.resolve('./assets/common/glob-loader')
-					},
-					{
-						loader: path.resolve('./assets/common/amd-loader')
 					}
 				],
 				

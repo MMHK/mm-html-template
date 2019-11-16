@@ -4,7 +4,7 @@ let app = (()=>{
     var page_inited = false;
 
     return {
-        render_page(modules) {
+        render_page(namespace) {
             if (this.page_inited) {
                 return
             }
@@ -16,8 +16,12 @@ let app = (()=>{
 
                 $ele.addClass("loading");
 
-                let module = modules[alias];
-                module();
+                import(
+                    /* webpackMode: "lazy-once" */
+                    /* webpackInclude: /\.js$/ */
+                    `../${namespace}/page/${alias}.js`
+                )
+
                 $ele.removeClass("loading");
             });
 
