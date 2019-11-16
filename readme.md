@@ -47,15 +47,6 @@ scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
 
 
-
-## 打包中文字体
-
-`gulp font` 命令会将`assets/static/fonts/src`文件中使用过的中文字体压缩到`assets/static/fonts`目录下，
-
-**中文源字体请放到 `assets/static/fonts/src` 目录下**。
-
-
-
 ## 脚手架
 
 - `npm run create` 命令用于创建对应的页面`javascript` 文件，请使用默认命名空间 `default`。
@@ -70,6 +61,6 @@ scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
 ## 项目打包
 
-- 执行编译命令 `npm run dist`。
+- 执行编译命令 `npm run build`。
 
 
