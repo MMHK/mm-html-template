@@ -1,12 +1,22 @@
 .page-home {
     background-color: white;
     min-height: 15em;
-    max-width: 1024px;
-    margin: 1em auto;
-    transition: all ease 0.5s;
+    position: relative;
 
     p {
         padding: 1em;
         margin: 0.5em 0;
+    }
+
+    .loading {
+        display: inline-block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &.ready .loading {
+        display: none;
     }
 }

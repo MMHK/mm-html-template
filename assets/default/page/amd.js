@@ -3,5 +3,5 @@ define([
 ], function($) {
     'use strict';
 
-    $("#page_amd").text("config.default.text");
+    $("#page_amd").text("Content");
 });

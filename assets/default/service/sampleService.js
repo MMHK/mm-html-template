@@ -18,12 +18,5 @@ export default {
                 format: "html",
             }
         });
-    },
-    guwen() {
-        return http.get("/../guwen/selectall", {
-            params: {
-                page: 1
-            }
-        });
     }
 }

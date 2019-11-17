@@ -244,12 +244,7 @@ module.exports = {
 				target: "https://baconipsum.com/api",
 				secure: false,
     			changeOrigin: true,
-			},
-			"/guwen": {
-				target: "https://www.caoxingyu.club/guwen",
-				secure: false,
-    			changeOrigin: true,
-            }
+			}
         },
 	}
 };
