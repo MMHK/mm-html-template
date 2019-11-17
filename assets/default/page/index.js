@@ -1,9 +1,21 @@
 import $ from 'jquery'
+import { hidden } from 'ansi-colors';
 
-let $text = $("#text_span"),
-    counter = 0;
+let $section = $(".page-index section:first");
 
-setInterval(function () {
-    counter++;
-    $text.text(counter);
-}, 1000);
+$section.css({
+    "overflow": "hidden",
+    "height": "1.5em",
+});
+
+let start = 1.5;
+
+
+const render = () => {
+    start += 1.5;
+    $section.css("height", start + "em");
+    if (start < 28) {
+        setTimeout(render, 1000);
+    }
+}
+render();

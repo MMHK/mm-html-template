@@ -17,20 +17,16 @@ html {
   margin: 0;
   padding: 0;
 }
-header {
-  min-height: rem(100px);
-}
 main {
-  //min-height: rem(300px);
-}
-footer {
-  min-height: rem(100px);
+  min-height: rem(150px);
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: white;
 }
 
 .container {
   width: 100%;
-  max-width: $desktop_layout_width * 1px;
-  margin: 0 auto;
+  background: url(../images/common/bg.jpg) repeat;
 }
 
 //* *************** */

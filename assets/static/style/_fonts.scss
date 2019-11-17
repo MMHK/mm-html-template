@@ -3,8 +3,36 @@
     src: url("../fonts/MHeiHK-Medium.eot"); /* IE9 */
     src: url("../fonts/MHeiHK-Medium.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
     url("../fonts/MHeiHK-Medium.woff") format("woff"), /* chrome, firefox */
+    url("../fonts/MHeiHK-Medium.woff2") format("woff2"), /* chrome, firefox */
     url("../fonts/MHeiHK-Medium.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
     url("../fonts/MHeiHK-Medium.svg#MHeiHK-Medium") format("svg"); /* iOS 4.1- */
     font-style: normal;
     font-weight: normal;
 }
+
+
+@font-face {
+    font-family: "MSungHK-Light";
+    src: url("../fonts/MSungHK-Light.eot"); /* IE9 */
+    src: url("../fonts/MSungHK-Light.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../fonts/MSungHK-Light.woff") format("woff"), /* chrome, firefox */
+    url("../fonts/MSungHK-Light.woff2") format("woff2"), /* chrome, firefox */
+    url("../fonts/MSungHK-Light.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("../fonts/MSungHK-Light.svg#MSungHK-Light") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+@font-face {
+    font-family: "MSungHK-Medium";
+    src: url("../fonts/MSungHK-Medium.eot"); /* IE9 */
+    src: url("../fonts/MSungHK-Medium.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../fonts/MSungHK-Medium.woff") format("woff"), /* chrome, firefox */
+    url("../fonts/MSungHK-Medium.woff2") format("woff2"), /* chrome, firefox */
+    url("../fonts/MSungHK-Medium.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("../fonts/MSungHK-Medium.svg#MSungHK-Medium") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+

@@ -1,21 +1,28 @@
 .page-index {
     min-height: rem(550px);
     text-align: center;
-    
-    background: url(../images/common/bg.jpg) repeat;
-    
-    color: #ff0000;
-    
-    &:before {
-        content: "This is Home Page";
+
+    font-family: "MSungHK-Medium", Arial, Helvetica, sans-serif;
+
+    line-height: 1.5;
+
+    h3 {
+        padding: 0.5em 0;
+        font-size: 2em;
     }
 
-    ul > li {
-        margin: 1em 0;
+    .author {
+        padding: 0.5em;
+        font-size: 0.8em;
     }
 
-    a {
-        color: blue;
-        text-decoration: underline;
+    section {
+        transition: all 0.5s ease;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-index {
+        font-size: rem(42px);
     }
 }

@@ -1,0 +1,23 @@
+.other-links {
+    font-size: rem(12px);
+    ul {
+        margin: rem(25px) 0 rem(10px) 0;
+        border-bottom: black 1px solid;
+    }
+
+    
+    a {
+        color: blue;
+        border-top: black 1px solid;
+        padding: 0.5em 0;
+        line-height: 1.5;
+        display: block;
+        
+        &:hover {
+            font-weight: 700;
+            text-decoration: underline;
+            color: white;
+            background-color: black;
+        }
+    }
+}

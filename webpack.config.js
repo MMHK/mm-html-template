@@ -22,7 +22,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const FontminPlugin = require('fontmin-webpack')
+const FontminPlugin = require('./assets/common/fontmin-webpack.js')
 
 /*
  * We've enabled HtmlWebpackPlugin for you! This generates a html
@@ -162,7 +162,7 @@ module.exports = {
 					{
 						loader: 'postcss-loader',
 						options: {
-						  sourceMap: false,
+						  sourceMap: true,
 						  plugins: () => [autoprefixer()],
 						}
 					},
@@ -170,6 +170,7 @@ module.exports = {
 						loader: 'sass-loader',
 						options: {
 							prependData: '@import "common";',
+							sourceMap: true,
 							sassOptions: {
 								includePaths: [
 									path.resolve(__dirname, "./assets/static/style/")
@@ -229,7 +230,7 @@ module.exports = {
 		minimize: process.env.NODE_ENV !== 'development',
 	},
 
-	// devtool: "source-map",
+	devtool: process.env.NODE_ENV === 'development' ? "eval" : "source-map",
 	watch: process.env.NODE_ENV === 'development',
 	watchOptions: {
 		ignored: /node_modules/
@@ -241,6 +242,11 @@ module.exports = {
 		proxy: {
             "/api": {
 				target: "https://baconipsum.com/api",
+				secure: false,
+    			changeOrigin: true,
+			},
+			"/guwen": {
+				target: "https://www.caoxingyu.club/guwen",
 				secure: false,
     			changeOrigin: true,
             }

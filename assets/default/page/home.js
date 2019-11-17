@@ -1,14 +1,29 @@
 import $ from 'jquery'
 import Service from "../service/sampleService"
 
+let $wrapper = $(".page-home"),
+    data = [];
+
+Service.guwen()
+    .then((json) => {
+        $wrapper.addClass("ready");
+        data = json.data;
+        render()
+    })
+    .catch(() => {
+        
+    });
+
+
 const render = () => {
-    Service.getSampleText()
-        .then((text) => {
-            let $text = $(".page-home")
-            $text.width(Math.random() * 500 + 500);
-            $text.html(text);
-            setTimeout(render, 1000);
-        })
+    let article = data.pop();
+    $wrapper.html(`
+    <article class="content">
+                    <h3>${article.title}</h3>
+                    <p>${article.writer}</p>
+                    <section>${article.content}</section>
+                </article>`)
+
+    setTimeout(render, 1000);
 };
 
-render()

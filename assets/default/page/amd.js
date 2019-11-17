@@ -1,8 +1,7 @@
 define([
-    'jquery', 
-    "common/config"
-], function($, config) {
+    'jquery'
+], function($) {
     'use strict';
 
-    $("#page_amd").text(config.default.text);
+    $("#page_amd").text("config.default.text");
 });
