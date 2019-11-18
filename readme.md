@@ -13,6 +13,7 @@ MM 中型项目 `html` 模版
 - `assets/common`，存放所有的第三方`js`组件。
 - `assets/static`，存放所有的 `images` 、 `fonts`、`css` 等资源文件。
 - `assets/default`，存放项目`js`文件。
+- `views`，存放项目页面文件。
 
 
 ## 开发服务器
