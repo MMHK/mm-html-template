@@ -5,8 +5,7 @@
   "main": "index.html",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server",
-    "font": "gulp font",
+    "serve": "webpack-dev-server",
     "test": "mocha"
   },
   "author": "Mixmedia",

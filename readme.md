@@ -47,18 +47,6 @@ scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
 
 
-## 脚手架
-
-- `npm run create` 命令用于创建对应的页面`javascript` 文件，请使用默认命名空间 `default`。
-
-脚手架默认包含3个`js`模版
-
-- `page`，页面js模版
-- `service`，用于处理页面`ajax`访问操作。
-- `component`，`VueJS` 组件
-
-
-
 ## 项目打包
 
 - 执行编译命令 `npm run build`。
