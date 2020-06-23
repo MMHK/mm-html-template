@@ -17,7 +17,7 @@ let app = (()=>{
                 $ele.addClass("loading");
 
                 import(
-                    /* webpackMode: "lazy-once" */
+                    /* webpackMode: "eager" */
                     /* webpackInclude: /\.js$/ */
                     `../${namespace}/page/${alias}.js`
                 )
