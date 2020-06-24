@@ -46,7 +46,26 @@ MM 中型项目 `html` 模版
 
 scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
+## Embed font 说明
 
+参考 `assets/static/style/_fonts.scss`, 先准备好 `@font-face` block。
+
+```
+@font-face {
+    font-family: "[FontName]";
+    src: url("../fonts/[FontName].eot"); /* IE9 */
+    src: url("../fonts/[FontName].eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../fonts/[FontName].woff") format("woff"), /* chrome, firefox */
+    url("../fonts/[FontName].woff2") format("woff2"), /* chrome, firefox */
+    url("../fonts/[FontName].ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("../fonts/[FontName].svg#[FontName]") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: 400;
+}
+```
+
+其中 `assets/static/fonts/` 目录下**必需要准备好 font 的 `ttf` 文件**，`fontmin-webpack` 会自动将`ttf` 文件转换成其他格式的文件。
+如果 `ttf` 文件超过 500K，将会对font 进行裁剪（常见于中文font），裁剪字符集来自 `view` 目录下的所有的 `*.[html|shtml]`。
 
 ## 项目打包
 
