@@ -4,18 +4,20 @@ import Service from "../service/sampleService"
 let $wrapper = $(".page-home"),
     $article = $wrapper.find("article");
 
-export default {
-    render() {
-        Service.getSampleText()
-            .then((data) => {
-                $wrapper.addClass("ready");
-                let text = data.split("\n").map((item) => {
-                    return `<p>${item}</p>`;
-                }).join("");
-                $article.html(`<section>${text}</section>`)
+const render = () => {
 
-                setTimeout(render, 1000);
-            })
-    }
-}
+    Service.getSampleText()
+        .then((data) => {
+            $wrapper.addClass("ready");
+            let text = data.split("\n").map((item) => {
+                return `<p>${item}</p>`;
+            }).join("");
+            $article.html(`<section>${text}</section>`)
+
+            setTimeout(render, 1000);
+        })
+    
+};
+
+render();
 

@@ -22,7 +22,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const FontminPlugin = require('./assets/common/fontmin-webpack.js');
+const FontminPlugin = require('./assets/webpack/fontmin-webpack.js');
 
 /*
  * We've enabled HtmlWebpackPlugin for you! This generates a html
@@ -112,24 +112,11 @@ module.exports = {
 				test: /.(js)$/,
 				include: [
 					path.resolve(__dirname, 'assets/default'),
-                    new RegExp(
-                        `node_modules/(?=(${[
-                            // ref: https://github.com/styleguidist/react-styleguidist/pull/1327
-                            'acorn-jsx',
-                            'estree-walker',
-                            'regexpu-core',
-                            'unicode-match-property-ecmascript',
-                            'unicode-match-property-value-ecmascript',
-                            'react-dev-utils',
-                            'ansi-styles',
-                            'ansi-regex',
-                            'ansi-colors',
-                            'chalk',
-                            'strip-ansi'
-                        ].join('|')})/).*`
-                    )
+					path.resolve(__dirname, 'assets/common'),
+					path.resolve(__dirname, 'node_modules/ansi-colors'),
 				],
-				use: [
+                exclude: /(node_modules)/,
+                use: [
 					{
 						loader: 'babel-loader',
 						options: {
@@ -154,9 +141,9 @@ module.exports = {
 							]
 						}
 					},
-					{
-						loader: "webpack-extended-import-glob-loader"
-					}
+					// {
+					// 	loader: "webpack-extended-import-glob-loader"
+					// }
 				],
 				
 			},
@@ -165,7 +152,7 @@ module.exports = {
 				use: [
 					{ loader: 'html-loader' },
 					{
-						loader: path.resolve('./assets/common/ssi-loader'),
+						loader: path.resolve('./assets/webpack/ssi-loader'),
 						options: {
 							baseDir: path.join(__dirname, "views/"),
 						}

@@ -1,23 +1,33 @@
 import $ from 'jquery'
 
-export default {
-    matchPage: function () {
+let app = (()=>{
+    var page_inited = false;
 
-        const inited = global.inited || false;
+    return {
+        render_page(namespace) {
+            if (this.page_inited) {
+                return
+            }
 
-        if (inited) {
-            return [];
+            //parse page
+            $("*[data-page]").each((index, ele) => {
+                var $ele = $(ele),
+                    alias =  $ele.data("page");
+
+                $ele.addClass("loading");
+
+                import(
+                    /* webpackMode: "eager" */
+                    /* webpackInclude: /\.\.\/(.*)\/page\/(.*)\\.js$/ */
+                    `../${namespace}/page/${alias}.js`
+                )
+
+                $ele.removeClass("loading");
+            });
+
+            this.page_inited = true;
         }
-
-        const pageList = $("*[data-page]").map(function(index, ele) {
-            const $ele = $(ele),
-                alias =  $ele.data("page");
-
-            return alias;
-        });
-
-        global.inited = true;
-
-        return Array.from(pageList);
     }
-};
+})();
+
+export default app

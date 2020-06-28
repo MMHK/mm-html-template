@@ -3,10 +3,5 @@ define([
 ], function($) {
     'use strict';
 
-
-    return {
-        render: function () {
-            $("#page_amd").text("Content");
-        }
-    }
+    $("#page_amd").text("Content");
 });

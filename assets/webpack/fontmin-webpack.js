@@ -1,17 +1,17 @@
 const fs = require('fs')
 const path = require('path')
-const log = require('debug')('fontmin-webpack')
+const log = require('debug')('fontmin-webpack');
 
-const _ = require('lodash')
-const ttf2woff2 = require('ttf2woff2')
-const Fontmin = require('fontmin')
-const RawSource = require('webpack-sources').RawSource
+const _ = require('lodash');
+const ttf2woff2 = require('ttf2woff2');
+const Fontmin = require('fontmin');
+const RawSource = require('webpack-sources').RawSource;
 
-const FONT_REGEX = /\.(eot|ttf|svg|woff|woff2)$/
+const FONT_REGEX = /\.(eot|ttf|svg|woff|woff2)$/;
 const TEXT_REGEX = /\.(js|css|html)$/
-const GLYPH_REGEX = /content\s*:[^};]*?('|")(.*?)\s*('|"|;)/g
-const UNICODE_REGEX = /\\(\w{4})/
-const FONTMIN_EXTENSIONS = ['eot', 'woff', 'svg']
+const GLYPH_REGEX = /content\s*:[^};]*?('|")(.*?)\s*('|"|;)/g;
+const UNICODE_REGEX = /\\(\w{4})/;
+const FONTMIN_EXTENSIONS = ['eot', 'woff', 'svg', 'woff2'];
 
 class FontminPlugin {
     constructor(options) {
@@ -217,10 +217,9 @@ class FontminPlugin {
                 const testReg = /\.(woff|woff2|svg|eot)$/i;
                 const filePath = path.join(request.path, request.request);
                 if (testReg.test(filePath) && !fs.existsSync(filePath)) {
-                    const obj = Object.assign({}, request, {
-                        request: request.request.replace(testReg, '.ttf'),
-                    });
-                    return resolver.doResolve(resolver.hooks.resolve, obj, null, resolveContext, callback);
+                    fs.writeFileSync(filePath, "");
+
+                    return resolver.doResolve(resolver.hooks.resolve, request, null, resolveContext, callback);
                 }
 
                 callback();
