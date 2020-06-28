@@ -21,8 +21,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const FontminPlugin = require('./assets/common/fontmin-webpack.js')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const FontminPlugin = require('./assets/common/fontmin-webpack.js');
 
 /*
  * We've enabled HtmlWebpackPlugin for you! This generates a html
@@ -50,15 +50,16 @@ const getFontmin = () => {
 		autodetect: true, // automatically pull unicode characters from CSS
 		glyphs: Buffer.concat(charList).toString('utf-8').split(""),
 	})
-}
+};
+
 
 
 module.exports = {
 	mode: 'development',
-	entry: {
-		"main": './assets/default/main.js',
-		'style': './assets/static/style/main.scss'
-	},
+	entry: [
+		'./assets/default/main.js',
+		'./assets/static/style/main.scss'
+    ],
 
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -109,22 +110,52 @@ module.exports = {
 		rules: [
 			{
 				test: /.(js)$/,
-				include: [path.resolve(__dirname, 'assets/default')],
+				include: [
+					path.resolve(__dirname, 'assets/default'),
+                    new RegExp(
+                        `node_modules/(?=(${[
+                            // ref: https://github.com/styleguidist/react-styleguidist/pull/1327
+                            'acorn-jsx',
+                            'estree-walker',
+                            'regexpu-core',
+                            'unicode-match-property-ecmascript',
+                            'unicode-match-property-value-ecmascript',
+                            'react-dev-utils',
+                            'ansi-styles',
+                            'ansi-regex',
+                            'ansi-colors',
+                            'chalk',
+                            'strip-ansi'
+                        ].join('|')})/).*`
+                    )
+				],
 				use: [
 					{
 						loader: 'babel-loader',
 						options: {
-							plugins: ['syntax-dynamic-import'],
+							plugins: [
+								[
+									"@babel/plugin-transform-template-literals", {
+									loose: true
+								}],
+								"@babel/plugin-transform-runtime",
+								"@babel/plugin-syntax-dynamic-import"
+							],
 
 							presets: [
 								[
 									'@babel/preset-env',
 									{
-										modules: false
+										modules: false,
+										useBuiltIns: "usage",
+										corejs: 3
 									}
 								]
 							]
 						}
+					},
+					{
+						loader: "webpack-extended-import-glob-loader"
 					}
 				],
 				
@@ -212,12 +243,12 @@ module.exports = {
 	optimization: {
 		splitChunks: {
 			cacheGroups: {
-				vendors: {
-					name: 'vendor',
-					chunks: 'initial',
-					test: /node_modules/,
-					priority: 10,
-				}
+				// vendors: {
+				// 	name: 'vendor',
+				// 	chunks: 'initial',
+				// 	test: /node_modules/,
+				// 	priority: 10,
+				// }
 			},
 
 
@@ -230,7 +261,7 @@ module.exports = {
 		minimize: process.env.NODE_ENV !== 'development',
 	},
 
-	devtool: process.env.NODE_ENV === 'development' ? "eval" : "source-map",
+	devtool: process.env.NODE_ENV === 'development' ? false : "source-map",
 	watch: process.env.NODE_ENV === 'development',
 	watchOptions: {
 		ignored: /node_modules/
