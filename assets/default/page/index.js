@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import { hidden } from 'ansi-colors';
 
 let $section = $(".page-index section:first");
 

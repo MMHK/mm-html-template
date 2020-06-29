@@ -132,13 +132,13 @@ class FontminPlugin {
         const first = group[0];
 
         return _.map(byExtension, (item, extension) => {
-                const isWoff2 = (extension === '.woff2');
+                // const isWoff2 = (extension === '.woff2');
                 const buffer = item.contents;
                 if (!buffer) {
                     return undefined
                 }
 
-                const minified = isWoff2 ? ttf2woff2(buffer) : buffer;
+                const minified = buffer;
                 const asset = first.asset.replace(first.extension, extension);
                 const font = first.font;
                 return {minified, asset, extension, font, buffer }

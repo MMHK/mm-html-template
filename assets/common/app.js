@@ -18,9 +18,10 @@ let app = (()=>{
 
                 import(
                     /* webpackMode: "eager" */
-                    /* webpackInclude: /\.\.\/(.*)\/page\/(.*)\\.js$/ */
+                    /* webpackInclude: /\.js$/ */
+                    /* webpackExclude: /(webpack)/ */
                     `../${namespace}/page/${alias}.js`
-                )
+                );
 
                 $ele.removeClass("loading");
             });

@@ -111,11 +111,9 @@ module.exports = {
 			{
 				test: /.(js)$/,
 				include: [
-					path.resolve(__dirname, 'assets/default'),
-					path.resolve(__dirname, 'assets/common'),
-					path.resolve(__dirname, 'node_modules/ansi-colors'),
+					path.resolve(__dirname, 'assets'),
 				],
-                exclude: /(node_modules)/,
+                exclude: /(node_modules|webpack)/,
                 use: [
 					{
 						loader: 'babel-loader',
@@ -141,9 +139,6 @@ module.exports = {
 							]
 						}
 					},
-					// {
-					// 	loader: "webpack-extended-import-glob-loader"
-					// }
 				],
 				
 			},
