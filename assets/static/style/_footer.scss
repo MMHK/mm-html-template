@@ -1,0 +1,17 @@
+footer {
+  text-align: center;
+  padding: 1em 0;
+
+  span {
+    font-size: rem(12px);
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 768px) {
+  footer {
+    span {
+      font-size: rem(24px);
+    }
+  }
+}

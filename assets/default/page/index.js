@@ -1,12 +1,13 @@
 define([
-    "jquery"
+    "jquery",
+    "css!default/page/index.css"
 ], function($){
 
-    var $text = $("#text_span"),
-        counter = 0;
-    
-    setInterval(function(){
-        counter++;
-        $text.text(counter);
+    const $text = $("#text_span");
+
+    setInterval(() => {
+        let now = new Date();
+
+        $text.text(`${now.toLocaleString()}`);
     }, 1000);
 });

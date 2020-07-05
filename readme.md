@@ -50,7 +50,7 @@ scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
 ## 打包中文字体
 
-`gulp font` 命令会将`assets/static/fonts/src`文件中使用过的中文字体压缩到`assets/static/fonts`目录下，
+`npm run font` 命令会将`assets/static/fonts/src`文件中使用过的中文字体压缩到`assets/static/fonts`目录下，
 
 **中文源字体请放到 `assets/static/fonts/src` 目录下**。
 

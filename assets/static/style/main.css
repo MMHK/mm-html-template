@@ -418,12 +418,6 @@ html {
   margin: 0;
   padding: 0; }
 
-header {
-  min-height: 4.16667rem; }
-
-footer {
-  min-height: 4.16667rem; }
-
 .container {
   width: 100%;
   max-width: 1440px;
@@ -501,12 +495,73 @@ body {
   font-style: normal;
   font-weight: normal; }
 
+@font-face {
+  font-family: "HanWangKaiMediumChuIn";
+  src: url("../fonts/WangHanZongZhongKaiTiZhuYin-1.eot");
+  /* IE9 */
+  src: url("../fonts/WangHanZongZhongKaiTiZhuYin-1.eot?#iefix") format("embedded-opentype"), url("../fonts/WangHanZongZhongKaiTiZhuYin-1.woff") format("woff"), url("../fonts/WangHanZongZhongKaiTiZhuYin-1.ttf") format("truetype"), url("../fonts/WangHanZongZhongKaiTiZhuYin-1.svg#HanWangKaiMediumChuIn") format("svg");
+  /* iOS 4.1- */
+  font-style: normal;
+  font-weight: normal; }
+
+header h3 {
+  font-size: 0.83333rem;
+  padding: 0.5em 0; }
+
+@media (max-width: 768px) {
+  header h3 {
+    font-size: 1.16667rem; } }
+
+footer {
+  text-align: center;
+  padding: 1em 0; }
+  footer span {
+    font-size: 0.5rem;
+    text-transform: uppercase; }
+
+@media (max-width: 768px) {
+  footer span {
+    font-size: 1rem; } }
+
 .page-index {
   min-height: 22.91667rem;
   text-align: center;
-  background: url(../images/common/bg.jpg) repeat;
-  color: #ff0000; }
+  background: url(../images/common/bg.jpg) repeat-y;
+  color: #ff0000;
+  max-width: 1280px;
+  margin: 0 auto; }
   .page-index:before {
-    content: "Hello~"; }
+    content: "Sub Title";
+    display: block;
+    font-weight: 700;
+    padding: 1em;
+    color: #ffffff; }
+  .page-index:after {
+    content: '';
+    display: table;
+    clear: both; }
+  .page-index article {
+    max-width: 33.33333rem;
+    color: #ffffff;
+    margin: 2em auto;
+    font-family: "HanWangKaiMediumChuIn", sans-serif; }
+    .page-index article h5 {
+      font-size: 1.25rem;
+      padding: 0.5em 0; }
+    .page-index article span {
+      display: block;
+      margin: 1em 0;
+      font-size: 0.8em; }
+    .page-index article p {
+      line-height: 2;
+      padding: 1em 0;
+      text-align: left; }
+
+@media (max-width: 768px) {
+  .page-index {
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+    padding: 1em; } }
 
 /*# sourceMappingURL=main.css.map */

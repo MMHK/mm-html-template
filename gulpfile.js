@@ -1,35 +1,37 @@
-var gulp = require('gulp');
-var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer');
-var cssnano = require('cssnano');
-var concat = require('gulp-concat');
-var path = require('path');
-var sourcemaps = require('gulp-sourcemaps');
-var webserver = require('gulp-webserver');
-var connectSSI = require('connect-ssi');
-var ssi = require("node-ssi");
-var gutil = require('gulp-util');
-var fontmin = require("gulp-fontmin");
-var through = require('through2');
-var htmlreplace = require('gulp-html-replace');
-var crypto = require('crypto');
-var sass = require('gulp-sass');
-var replace = require('gulp-replace');
-var uglify = require('gulp-uglify');
-var glob = require("glob");
-var path = require("path");
-var inquirer = require('inquirer');
-var prompt = inquirer.createPromptModule();
-var rename = require("gulp-rename");
-var modifyCssUrls = require('gulp-modify-css-urls');
-var rjs = require('gulp-requirejs-optimize');
-var fs = require("fs");
+const gulp = require('gulp');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const concat = require('gulp-concat');
+const sourcemaps = require('gulp-sourcemaps');
+const webserver = require('gulp-webserver');
+const connectSSI = require('connect-ssi');
+const ssi = require("node-ssi");
+const PluginError = require('plugin-error');
+const fontmin = require("gulp-fontmin");
+const through = require('through2');
+const htmlreplace = require('gulp-html-replace');
+const crypto = require('crypto');
+const sass = require('gulp-sass');
+const replace = require('gulp-replace');
+const uglify = require('gulp-uglify');
+const glob = require("glob");
+const path = require("path");
+const inquirer = require('inquirer');
+const prompt = inquirer.createPromptModule();
+const rename = require("gulp-rename");
+const modifyCssUrls = require('gulp-modify-css-urls');
+const rjs = require('gulp-requirejs-optimize');
+const fs = require("fs");
+const browserify = require("browserify");
+const source = require("vinyl-source-stream");
+const buffer = require('vinyl-buffer');
 
 /**
  * 获取AMD模块 
  */
-var getAMDModule = function (basepath, globlist) {
-    var list = [];
+const getAMDModule = function (basepath, globlist) {
+    let list = [];
 
     globlist.forEach(function (item) {
         list = list.concat(glob.sync(path.join(basepath, item)));
@@ -37,10 +39,10 @@ var getAMDModule = function (basepath, globlist) {
 
     list = list.map(function (item) {
         return path.relative(basepath, item).replace(".js", "").split(path.sep).join("/");
-    })
+    });
 
     return list;
-}
+};
 
 /**
  *
@@ -52,12 +54,12 @@ function bundleCSS(rjsConfig) {
      */
     console.log("begin minify bundle css");
 
-    var basePath = rjsConfig.entryDir,
+    let basePath = rjsConfig.entryDir,
         CssList = rjsConfig.css.concat([
             __dirname + "/FUNCTION.css"
         ]);
 
-    var processors = [
+    let processors = [
         //自动增加css平台兼容前缀
         autoprefixer(),
         //css 压缩去重
@@ -67,14 +69,14 @@ function bundleCSS(rjsConfig) {
         })
     ];
 
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve) => {
         gulp.src(CssList, {
                 allowEmpty: true,
                 sourcemaps: true
             })
             .pipe(modifyCssUrls({
                 modify: function (url, filepath) {
-                    var p = path.join(path.dirname(filepath), url);
+                    const p = path.join(path.dirname(filepath), url);
                     return path.relative(basePath, p).replace(/\\/ig, '/');
                 }
             }))
@@ -98,7 +100,7 @@ function bundleCSS(rjsConfig) {
  */
 function rjsCommon(basePath, configPath) {
     console.log("begin bundle amd modules");
-    var extraConfig = arguments.length > 2 ? arguments[2] : {};
+    let extraConfig = arguments.length > 2 ? arguments[2] : {};
 
     global.window = {};
     global.BASE_PATH = basePath;
@@ -108,6 +110,7 @@ function rjsCommon(basePath, configPath) {
         rjsConfig = Object.assign({
             wrapShim: true,
             useStrict: true,
+            skipPragmas:true,
             baseUrl: basePath,
             generateSourceMaps: true,
             preserveLicenseComments: false,
@@ -129,7 +132,7 @@ function rjsCommon(basePath, configPath) {
 
     rjsConfig = beforeRjsbuild(rjsConfig);
 
-    var done = new Promise(function (resolve, reject) {
+    const done = new Promise(function (resolve) {
         gulp.src(rjsConfig.entry)
             .pipe(sourcemaps.init({
                 largeFile: true
@@ -144,12 +147,12 @@ function rjsCommon(basePath, configPath) {
     });
 
     return done.then(function (rjsConfig) {
-        var done1 = new Promise(function (resolve, reject) {
+        const done1 = new Promise(function (resolve) {
             /**
              * 合并js
              */
             console.log("begin minify main js");
-            var modulesPath = rjsConfig.entryDir + "/modules.js";
+            const modulesPath = rjsConfig.entryDir + "/modules.js";
             gulp.src(rjsConfig.vendor.concat([
                     modulesPath
                 ]), {
@@ -160,16 +163,53 @@ function rjsCommon(basePath, configPath) {
                     largeFile: true
                 }))
                 .pipe(concat("main.min.js"))
-                .pipe(uglify().on("error", function () {
-                    console.log(arguments);
-                }))
                 .pipe(sourcemaps.write("."))
                 .pipe(gulp.dest(rjsConfig.entryDir))
                 .on("end", function () {
-                    console.log("minify main js complete");
-                    fs.unlinkSync(modulesPath);
+                    // fs.unlinkSync(modulesPath);
                     resolve(modulesPath);
                 });
+        })
+        .then((modulesPath) => {
+            return new Promise(resolve => {
+                browserify({
+                    entries: rjsConfig.entryDir + "/main.min.js",
+                    debug: true
+                })
+                    .transform("babelify", {
+                        presets: [
+                            ["@babel/preset-env", {
+                                useBuiltIns: "usage",
+                                corejs: 3
+                            }]
+                        ],
+                        plugins: [
+                            ["@babel/plugin-transform-runtime", {
+                                "absoluteRuntime": false,
+                                "helpers": true,
+                                "regenerator": true,
+                                "useESModules": false
+                            }],
+                            "@babel/plugin-syntax-dynamic-import"
+                        ],
+                        exclude: [
+                            /(common)/i
+                        ]
+                    })
+                    .bundle()
+                    .pipe(source('main.min.js'))
+                    .pipe(buffer())
+                    .pipe(sourcemaps.init({loadMaps: true}))
+                    .pipe(uglify().on("error", function () {
+                        console.log(arguments);
+                    }))
+                    .pipe(sourcemaps.write('.'))
+                    .pipe(gulp.dest(rjsConfig.entryDir))
+                    .on("end", () =>{
+                        console.log("minify main js complete");
+                        resolve();
+                    })
+            });
         });
 
         return Promise.all([done1, bundleCSS(rjsConfig)]);
@@ -226,7 +266,7 @@ function commonTemplate(basePath) {
             name: 'name',
             message: "请填写文件名（不包含路径）",
             validate: function (value) {
-                var reg = /^([0-9a-z\-\/]{1,12})$/i
+                const reg = /^([0-9a-z\-\/]{1,12})$/i
                 if (reg.test(value)) {
                     return true;
                 }
@@ -278,23 +318,25 @@ gulp.task("copy", function () {
 
 
 //ssi 编译处理
-var ssiHandler = function (options) {
+const ssiHandler = function (options) {
     if (arguments.length <= 0) {
         options = {};
     }
-    var opt = Object.assign({
+    let opt = Object.assign({
         baseDir: "./",
         encoding: "utf-8"
     }, options);
 
-    var handler = new ssi(opt);
+    const handler = new ssi(opt);
 
     return through.obj(function (file, encoding, callback) {
         if (file.isNull()) {
             return callback();
         }
         if (file.isStream()) {
-            callback(new gutil.PluginError("ssiHandler", 'Streaming not supported'));
+            callback(new PluginError("ssiHandler", {
+                message: "Streaming not supported"
+            }));
             return;
         }
         if (file.isBuffer()) {
@@ -309,8 +351,8 @@ var ssiHandler = function (options) {
 };
 // 生成随即字符
 function getHash() {
-    var current_date = (new Date()).valueOf().toString();
-    var random = Math.random().toString();
+    const current_date = (new Date()).valueOf().toString();
+    const random = Math.random().toString();
     return crypto.createHash('sha1').update(current_date + random).digest('hex');
 }
 
@@ -328,27 +370,33 @@ function minifyFont(text, cb) {
 /**
  * 压缩中文字体
  */
-gulp.task('font', function (cb) {
-    var buffers = [];
+gulp.task('font', function (next) {
+    let buffers = [];
     gulp
         .src(['./*.html', '*.shtml'])
         .on('data', function (file) {
             buffers.push(file.contents);
         })
         .on('end', function () {
-            var text = Buffer.concat(buffers).toString('utf-8');
-            minifyFont(text, cb);
+            const text = Buffer.concat(buffers).toString('utf-8');
+            minifyFont(text, next);
         });
 });
 
-gulp.task("static", function () {
+gulp.task("font:watch", () => {
+    return gulp.watch([
+        "./*.html",
+        "./*.shtml"
+    ], gulp.parallel("font"));
+});
+
+gulp.task("static", gulp.series(()=> {
     return gulp.src(['./assets/static/images/**/*'])
         .pipe(gulp.dest('./dist/assets/static/images/'))
-        .on("end", function () {
-            return gulp.src("./assets/static/fonts/*")
-                .pipe(gulp.dest('./dist/assets/static/fonts/'));
-        })
-});
+}, () => {
+    return gulp.src(["./assets/static/fonts/*"])
+        .pipe(gulp.dest('./dist/assets/static/fonts/'));
+}));
 
 gulp.task("html", function () {
     return gulp.src("./*.html")
@@ -363,9 +411,7 @@ gulp.task("html", function () {
 });
 
 gulp.task('sass', function () {
-    return gulp.src('./assets/static/style/*.scss', {
-            sourcemaps: true
-        })
+    return gulp.src('./assets/static/style/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(sourcemaps.write('.'))
@@ -397,7 +443,7 @@ gulp.task("serve", async () => {
 /**
  * 打包前端
  */
-gulp.task("dist", gulp.series("sass", "build", gulp.parallel("html", "copy")));
+gulp.task("dist", gulp.series("sass", "build", gulp.parallel("html", gulp.series("font", "static"), "copy")));
 
 //开发脚手架
-gulp.task("default", gulp.series("sass", gulp.parallel("sass:watch", "serve")));
+gulp.task("default", gulp.series("sass", gulp.parallel("font:watch", "sass:watch", "serve")));

@@ -1,0 +1,15 @@
+header {
+
+  h3 {
+    font-size: rem(20px);
+    padding: 0.5em 0;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    h3 {
+      font-size: rem(28px);
+    }
+  }
+}
