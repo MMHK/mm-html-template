@@ -81,7 +81,7 @@ module.exports = {
 		// Options similar to the same options in webpackOptions.output
 		// all options are optional
 		filename: 'css/[name].css',
-		chunkFilename: 'css/[id].css',
+		// chunkFilename: 'css/[id].css',
 		ignoreOrder: false, // Enable to remove warnings about conflicting order
 	}),
 
@@ -243,15 +243,19 @@ module.exports = {
 		minimize: process.env.NODE_ENV !== 'development',
 	},
 
-	devtool: process.env.NODE_ENV === 'development' ? false : "source-map",
+	devtool: "source-map",
 	watch: process.env.NODE_ENV === 'development',
 	watchOptions: {
-		ignored: /node_modules/
+		ignored: /(node_modules|webpack)/
 	},
 	devServer: {
 		open: true,
 		contentBase: path.join(__dirname, 'dist'),
 		compress: true,
+        allowedHosts: [
+        	"localhost",
+			".demo2.mixmedia.com",
+		],
 		proxy: {
             "/api": {
 				target: "https://baconipsum.com/api",

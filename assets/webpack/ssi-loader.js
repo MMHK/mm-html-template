@@ -2,7 +2,7 @@ const loaderUtils = require("loader-utils");
 const path = require("path");
 const SSI = require("node-ssi");
 
-const includeFileReg = /<!--#\s*include\s+(file|virtual)=(['"])([^\r\n\s]+?)\2\s*(.*)-->/;
+const includeFileReg = /<!--#\s*include\s+(file|virtual)=(['"])([^\r\n\s]+?)\2\s*(.*)-->/g;
 const fileReg = /\=(['"]([^"']+)['"])/g;
 
 module.exports = function (source) {
@@ -18,7 +18,7 @@ module.exports = function (source) {
     );
 
     const ssi = new SSI(options);
-    let result = includeFileReg.exec(source.toString("UTF-8"));
+    let result = source.toString("UTF-8").match(includeFileReg);
     if (result) {
         let matches = result.join("").match(fileReg).map(item => {
             return item.replace(/["'=]+/g, "");
