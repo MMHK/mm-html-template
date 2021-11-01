@@ -6,8 +6,8 @@ MM 中型项目 `html` 模版
 
 - 准备好 [NodeJS](https://nodejs.org/download/release/v15.14.0/node-v15.14.0-x64.msi)  环境。
 - 准备好编译环境，在项目根目录执行
- - `npm` 安装方式  `npm install`。
- - `yarn` 方式 `yarn install`, 如没有安装 yarn 请先安装 yarn `npm i -g yarn`
+  - `npm` 安装方式  `npm install`。
+  - `yarn` 方式 `yarn install`, 如没有安装 yarn 请先安装 yarn `npm i -g yarn`
 
 ## 文件目录结构
 
