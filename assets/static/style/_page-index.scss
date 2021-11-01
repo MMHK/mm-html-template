@@ -1,59 +1,28 @@
 .page-index {
     min-height: rem(550px);
     text-align: center;
-    
-    background: url(../images/common/bg.jpg) repeat-y;
-    
-    color: #ff0000;
-    
-    &:before {
-        content: "Sub Title";
-        display: block;
-        font-weight: 700;
-        padding: 1em;
-        color: #ffffff;
+
+    font-family: "MSungHK", Arial, Helvetica, sans-serif;
+
+    line-height: 1.5;
+
+    h3 {
+        padding: 0.5em 0;
+        font-size: 2em;
     }
 
-    &:after {
-        content: '';
-        display: table;
-        clear: both;
+    .author {
+        padding: 0.5em;
+        font-size: 0.8em;
     }
 
-    max-width: 1280px;
-    margin: 0 auto;
-
-    article {
-        max-width: rem(800px);
-        color: #ffffff;
-        margin: 2em auto;
-        font-family: "HanWangKaiMediumChuIn", sans-serif;
-
-        h5 {
-            font-size: rem(30px);
-            padding: 0.5em 0;
-        }
-
-        span {
-            display: block;
-            margin: 1em 0;
-            font-size: 0.8em;
-        }
-
-        p {
-            line-height: 2;
-            padding: 1em 0;
-            text-align: left;
-        }
+    section {
+        transition: all 0.5s ease;
     }
 }
 
 @media (max-width: 768px) {
     .page-index {
-        box-sizing: border-box;
-
-        max-width: 100%;
-        width: 100%;
-        padding: 1em;
+        font-size: rem(42px);
     }
 }

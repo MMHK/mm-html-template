@@ -1,4 +1,4 @@
-@import "../../../node_modules/normalize-scss/sass/normalize";
+@import "normalize-scss";
 @include normalize();
 @import "common";
 
@@ -7,5 +7,9 @@
 @import "head";
 @import "footer";
 
+@import "other-links";
+
 @import "page-index";
+@import "page-home";
+@import "page-amd";
 

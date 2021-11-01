@@ -65,4 +65,4 @@ typings/
 /dist
 /assets/default/modules.js
 /.idea
-/FUNCTION.css
+/.vscode

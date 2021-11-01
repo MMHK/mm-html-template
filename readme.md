@@ -4,8 +4,10 @@ MM 中型项目 `html` 模版
 
 ## 编译前端环境
 
-- 准备好 [NodeJS](https://nodejs.org/dist/v8.9.1/node-v8.9.1-x64.msi)  环境。
-- 准备好编译环境，在项目根目录执行 `npm install`。
+- 准备好 [NodeJS](https://nodejs.org/download/release/v15.14.0/node-v15.14.0-x64.msi)  环境。
+- 准备好编译环境，在项目根目录执行
+ - `npm` 安装方式  `npm install`。
+ - `yarn` 方式 `yarn install`, 如没有安装 yarn 请先安装 yarn `npm i -g yarn`
 
 ## 文件目录结构
 
@@ -13,6 +15,7 @@ MM 中型项目 `html` 模版
 - `assets/common`，存放所有的第三方`js`组件。
 - `assets/static`，存放所有的 `images` 、 `fonts`、`css` 等资源文件。
 - `assets/default`，存放项目`js`文件。
+- `views`，存放项目页面文件。
 
 
 ## 开发服务器
@@ -45,31 +48,29 @@ MM 中型项目 `html` 模版
 
 scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
+## Embed font 说明
 
+参考 `assets/static/style/_fonts.scss`, 先准备好 `@font-face` block。
 
+```
+@font-face {
+    font-family: "[FontName]";
+    src: url("../fonts/[FontName].eot"); /* IE9 */
+    src: url("../fonts/[FontName].eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../fonts/[FontName].woff") format("woff"), /* chrome, firefox */
+    url("../fonts/[FontName].woff2") format("woff2"), /* chrome, firefox */
+    url("../fonts/[FontName].ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("../fonts/[FontName].svg#[FontName]") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: 400;
+}
+```
 
-## 打包中文字体
-
-`npm run font` 命令会将`assets/static/fonts/src`文件中使用过的中文字体压缩到`assets/static/fonts`目录下，
-
-**中文源字体请放到 `assets/static/fonts/src` 目录下**。
-
-
-
-## 脚手架
-
-- `npm run create` 命令用于创建对应的页面`javascript` 文件，请使用默认命名空间 `default`。
-
-脚手架默认包含3个`js`模版
-
-- `page`，页面js模版
-- `service`，用于处理页面`ajax`访问操作。
-- `component`，`VueJS` 组件
-
-
+其中 `assets/static/fonts/` 目录下**必需要准备好 font 的 `ttf` 文件**，`fontmin-webpack` 会自动将`ttf` 文件转换成其他格式的文件。
+如果 `ttf` 文件超过 500K，将会对font 进行裁剪（常见于中文font），裁剪字符集来自 `view` 目录下的所有的 `*.[html|shtml]`。
 
 ## 项目打包
 
-- 执行编译命令 `npm run dist`。
+- 执行编译命令 `npm run build`。
 
 

@@ -1,0 +1,29 @@
+.page-amd {
+    text-align: center;
+
+    #page_amd {
+        width: 50%;
+        margin: 0 auto;
+        padding: 2em;
+    }
+
+    article {
+        font-family: "Optima LT Std", "MHeiHK", sans-serif;
+        text-align: left;
+        width: rem(750px);
+        margin: 0 auto;
+
+        span {
+            font-size: 0.8em;
+        }
+
+        h3 {
+            margin: 0.5em 0;
+        }
+
+        p {
+            line-height: 1.5;
+            font-size: rem(18px);
+        }
+    }
+}

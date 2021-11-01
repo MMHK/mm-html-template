@@ -1,13 +1,20 @@
-define([
-    "jquery",
-    "css!default/page/index.css"
-], function($){
+import $ from 'jquery'
 
-    const $text = $("#text_span");
+let $section = $(".page-index section:first");
 
-    setInterval(() => {
-        let now = new Date();
-
-        $text.text(`${now.toLocaleString()}`);
-    }, 1000);
+$section.css({
+    "overflow": "hidden",
+    "height": "1.5em",
 });
+
+let start = 1.5;
+
+
+const render = () => {
+    start += 1.5;
+    $section.css("height", start + "em");
+    if (start < 28) {
+        setTimeout(render, 1000);
+    }
+}
+render();

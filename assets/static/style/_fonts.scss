@@ -1,47 +1,50 @@
 @font-face {
-    font-family: "MHeiHK-Medium";
+    font-family: "MHeiHK";
     src: url("../fonts/MHeiHK-Medium.eot"); /* IE9 */
     src: url("../fonts/MHeiHK-Medium.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
     url("../fonts/MHeiHK-Medium.woff") format("woff"), /* chrome, firefox */
+    url("../fonts/MHeiHK-Medium.woff2") format("woff2"), /* chrome, firefox */
     url("../fonts/MHeiHK-Medium.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
     url("../fonts/MHeiHK-Medium.svg#MHeiHK-Medium") format("svg"); /* iOS 4.1- */
     font-style: normal;
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: "HanWangKaiMediumChuIn";
-    src: url("../fonts/WangHanZongZhongKaiTiZhuYin-1.eot"); /* IE9 */
-    src: url("../fonts/WangHanZongZhongKaiTiZhuYin-1.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-    url("../fonts/WangHanZongZhongKaiTiZhuYin-1.woff") format("woff"), /* chrome, firefox */
-    url("../fonts/WangHanZongZhongKaiTiZhuYin-1.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-    url("../fonts/WangHanZongZhongKaiTiZhuYin-1.svg#HanWangKaiMediumChuIn") format("svg"); /* iOS 4.1- */
-    font-style: normal;
-    font-weight: normal;
+    font-weight: 400;
 }
 
 
 @font-face {
-    font-family: "Roboto";
-    src: url("../fonts/Roboto-Medium.eot");
-    src: url("../fonts/Roboto-Medium.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/Roboto-Medium.woff2") format("woff2"),
-    url("../fonts/Roboto-Medium.woff") format("woff"),
-    url("../fonts/Roboto-Medium.ttf") format("truetype"),
-    url("../fonts/Roboto-Medium.svg#Roboto-Medium") format("svg");
-    font-weight: 500;
+    font-family: "MSungHK";
+    src: url("../fonts/MSungHK-Light.eot"); /* IE9 */
+    src: url("../fonts/MSungHK-Light.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../fonts/MSungHK-Light.woff") format("woff"), /* chrome, firefox */
+    url("../fonts/MSungHK-Light.woff2") format("woff2"), /* chrome, firefox */
+    url("../fonts/MSungHK-Light.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("../fonts/MSungHK-Light.svg#MSungHK-Light") format("svg"); /* iOS 4.1- */
     font-style: normal;
+    font-weight: 300;
+}
+
+
+@font-face {
+    font-family: "MSungHK";
+    src: url("../fonts/MSungHK-Medium.eot"); /* IE9 */
+    src: url("../fonts/MSungHK-Medium.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../fonts/MSungHK-Medium.woff") format("woff"), /* chrome, firefox */
+    url("../fonts/MSungHK-Medium.woff2") format("woff2"), /* chrome, firefox */
+    url("../fonts/MSungHK-Medium.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("../fonts/MSungHK-Medium.svg#MSungHK-Medium") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: 400;
 }
 
 @font-face {
-    font-family: "Roboto";
-    src: url("../fonts/Roboto-Bold.eot");
-    src: url("../fonts/Roboto-Bold.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/Roboto-Bold.woff2") format("woff2"),
-    url("../fonts/Roboto-Bold.woff") format("woff"),
-    url("../fonts/Roboto-Bold.ttf") format("truetype"),
-    url("../fonts/Roboto-Bold.svg#Roboto-Bold") format("svg");
-    font-weight: bold;
+    font-family: "Optima LT Std";
+    src: url("../fonts/optimaltstd-medium.eot"); /* IE9 */
+    src: url("../fonts/optimaltstd-medium.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../fonts/optimaltstd-medium.woff") format("woff"), /* chrome, firefox */
+    url("../fonts/optimaltstd-medium.woff2") format("woff2"), /* chrome, firefox */
+    url("../fonts/optimaltstd-medium.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("../fonts/optimaltstd-medium.svg#optimaltstd-medium") format("svg"); /* iOS 4.1- */
     font-style: normal;
+    font-weight: 400;
 }
 

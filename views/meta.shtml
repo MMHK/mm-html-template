@@ -1,0 +1,4 @@
+<script>
+var BASE_PATH = "./assets";
+var API_URI = "/api";
+</script>

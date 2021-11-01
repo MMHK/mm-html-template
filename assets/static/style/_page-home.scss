@@ -1,0 +1,22 @@
+.page-home {
+    background-color: white;
+    min-height: 15em;
+    position: relative;
+
+    p {
+        padding: 1em;
+        margin: 0.5em 0;
+    }
+
+    .loading {
+        display: inline-block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &.ready .loading {
+        display: none;
+    }
+}
