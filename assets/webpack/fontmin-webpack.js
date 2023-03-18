@@ -47,10 +47,10 @@ class FontminPlugin {
     }
 
     findRegularFontFiles(compilation) {
-        return _(compilation.modules)
+        return _(Array.from(compilation.modules))
             .filter(module => this.hasFontAsset(module.buildInfo.assets))
             .map(module => {
-                const filename = Array.from(module.buildInfo.fileDependencies)[0]
+                const filename = Array.from(module.buildInfo?.fileDependencies || new Set())[0]
 
                 // log(module.buildInfo)
                 return _.keys(module.buildInfo.assets).map(asset => {
@@ -65,7 +65,7 @@ class FontminPlugin {
     }
 
     findExtractTextFontFiles(compilation) {
-        const fileDependencies = _(compilation.modules)
+        const fileDependencies = _(Array.from(compilation.modules))
             .map(module => Array.from(module.buildInfo.fileDependencies || new Set()))
             .flatten()
             .filter(filename => FONT_REGEX.test(filename))
@@ -131,6 +131,8 @@ class FontminPlugin {
 
         const first = group[0];
 
+        // log('mergeAssetsAndFiles', first);
+
         return _.map(byExtension, (item, extension) => {
                 // const isWoff2 = (extension === '.woff2');
                 const buffer = item.contents;
@@ -141,6 +143,7 @@ class FontminPlugin {
                 const minified = buffer;
                 const asset = first.asset.replace(first.extension, extension);
                 const font = first.font;
+                // log('mini out', {minified, asset, extension, font, buffer })
                 return {minified, asset, extension, font, buffer }
             });
 
@@ -158,7 +161,7 @@ class FontminPlugin {
 
         if (ttfInfo.buffer.length <= (500 * 1024)) {
             log('TTF file <= 500K, skipping usedGlyphs...');
-            _usedGlyphs = [];
+            return Promise.resolve([])
         }
 
         const extensions = _.map(group, 'extension')
@@ -193,7 +196,7 @@ class FontminPlugin {
                     return this.minifyFontGroup(group, glyphs)
                 })
                 .then(files => {
-                    // console.log(files);
+                    // log('after minifyFontGroup', files);
 
                     files.forEach(file => {
                         compilation.assets[file.asset] = new RawSource(file.minified)
@@ -205,25 +208,14 @@ class FontminPlugin {
 
     apply(compiler) {
         compiler.hooks.thisCompilation.tap('FontminPlugin', compilation => {
-            compilation.hooks.additionalAssets.tapAsync('FontminPlugin', async (done) => {
-                await this.onAdditionalAssets(compilation);
-                done()
-            })
-        });
-
-        compiler.resolverFactory.plugin('resolver normal', resolver => {
-            resolver.hooks.resolve.tapAsync('FontminPlugin', (request, resolveContext, callback) => {
-
-                const testReg = /\.(woff|woff2|svg|eot)$/i;
-                const filePath = path.join(request.path, request.request);
-                if (testReg.test(filePath) && !fs.existsSync(filePath)) {
-                    fs.writeFileSync(filePath, "");
-
-                    return resolver.doResolve(resolver.hooks.resolve, request, null, resolveContext, callback);
+            compilation.hooks.additionalAssets.tapPromise('FontminPlugin', () => {
+                if (!compilation.modules || !compilation.assets) {
+                    // eslint-disable-next-line no-console
+                    console.warn(`[FontminPlugin] Failed to detect modules. Check your webpack version!`)
+                    return Promise.resolve()
                 }
-
-                callback();
-            });
+                return this.onAdditionalAssets(compilation);
+            })
         });
     }
 }

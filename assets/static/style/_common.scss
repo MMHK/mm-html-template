@@ -4,14 +4,14 @@ $base_rem: 24px;
 
 @function d-vw($target) {
   $vw-context: ($desktop_layout_width*.01) * 1px;
-  @return ($target/$vw-context) * 1vw;
+  @return calc($target/$vw-context) * 1vw;
 }
 
 @function m-vw($target) {
   $vw-context: ($mobile_layout_width*.01) * 1px;
-  @return ($target/$vw-context) * 1vw;
+  @return calc($target/$vw-context) * 1vw;
 }
 
 @function rem($target) {
-  @return ($target/$base_rem) * 1rem;
+  @return calc($target/$base_rem) * 1rem;
 }

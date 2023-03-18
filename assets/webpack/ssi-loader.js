@@ -1,4 +1,3 @@
-const loaderUtils = require("loader-utils");
 const path = require("path");
 const SSI = require("node-ssi");
 
@@ -14,7 +13,7 @@ module.exports = function (source) {
             baseDir: "",
             encoding: 'utf-8'
         },
-        loaderUtils.getOptions(this) // it is safe to pass null to Object.assign()
+        this.getOptions() // it is safe to pass null to Object.assign()
     );
 
     const ssi = new SSI(options);

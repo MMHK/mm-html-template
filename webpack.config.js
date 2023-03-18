@@ -1,8 +1,9 @@
 const webpack = require('webpack');
-const glob = require("glob");
+const {globSync} = require("glob");
 const path = require("path");
 const fs = require("fs");
 const autoprefixer = require('autoprefixer');
+const log = require('debug')('fontmin-webpack')
 
 /*
  * SplitChunksPlugin is enabled by default and replaced
@@ -21,7 +22,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const FontminPlugin = require('./assets/webpack/fontmin-webpack.js');
 
 /*
@@ -33,7 +34,7 @@ const FontminPlugin = require('./assets/webpack/fontmin-webpack.js');
  *
  */
 
-const HTMlEntryList = glob.sync("./views/*.html").map((ele) => {
+const HTMlEntryList = globSync("./views/*.html").map((ele) => {
 	return new HtmlWebpackPlugin({
 		filename: path.basename(ele),
 		template: ele,
@@ -42,12 +43,12 @@ const HTMlEntryList = glob.sync("./views/*.html").map((ele) => {
 });
 
 const getFontmin = () => {
-	let charList = glob.sync(path.join(__dirname, "/views/*")).map((file) => {
+	let charList = globSync("views/*.{html,shtml}").map((file) => {
 		return fs.readFileSync(file)
 	})
-	
+
 	return new FontminPlugin({
-		autodetect: true, // automatically pull unicode characters from CSS
+		autodetect: false, // automatically pull unicode characters from CSS
 		glyphs: Buffer.concat(charList).toString('utf-8').split(""),
 	})
 };
@@ -65,6 +66,7 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist'),
 		chunkFilename: 'js/[name].js',
 		filename: 'js/[name].js',
+		assetModuleFilename: 'assets/[hash][ext][query]',
 	},
 
 	resolve: {
@@ -108,6 +110,10 @@ module.exports = {
 
 	module: {
 		rules: [
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader'
+			},
 			{
 				test: /.(js)$/,
 				include: [
@@ -163,7 +169,6 @@ module.exports = {
 							// you can specify a publicPath here
 							// by default it uses publicPath in webpackOptions.output
 							publicPath: "../",
-							hmr: process.env.NODE_ENV === 'development',
 						},
 					},
 					{
@@ -175,14 +180,18 @@ module.exports = {
 					{
 						loader: 'postcss-loader',
 						options: {
-						  sourceMap: true,
-						  plugins: () => [autoprefixer()],
+							postcssOptions: {
+								plugins: [
+									"autoprefixer",
+								],
+							},
+							sourceMap: true,
 						}
 					},
 					{
 						loader: 'sass-loader',
 						options: {
-							prependData: '@import "common";',
+							additionalData: '@import "common";',
 							sourceMap: true,
 							sassOptions: {
 								includePaths: [
@@ -195,22 +204,14 @@ module.exports = {
 			},
 			{
 				test: /\.(eot|svg|ttf|woff|woff2|png|jpe?g|gif)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: '[path][name].[ext]'
-						},
-					},
-				],
+				type: 'asset',
 			},
 			{
-				test:require.resolve('jquery'),
-				use:'expose-loader?$'
-			},
-			{
-				test: /\.vue$/,
-				loader: 'vue-loader'
+				test: require.resolve('jquery'),
+				loader:'expose-loader',
+				options: {
+					exposes: ["$", "jQuery"],
+				}
 			},
 			{
 				test: /\.css$/,
@@ -224,33 +225,35 @@ module.exports = {
 
 	optimization: {
 		splitChunks: {
-			cacheGroups: {
-				// vendors: {
-				// 	name: 'vendor',
-				// 	chunks: 'initial',
-				// 	test: /node_modules/,
-				// 	priority: 10,
-				// }
-			},
+			// cacheGroups: {
+			// 	vendors: {
+			// 		name: 'vendor',
+			// 		chunks: 'initial',
+			// 		test: /node_modules/,
+			// 		priority: 10,
+			// 	}
+			// },
 
 
 			chunks: 'async',
 			minChunks: 1,
 			minSize: 30000,
-			name: true
+			name: false
 		},
 
 		minimize: process.env.NODE_ENV !== 'development',
 	},
 
 	devtool: "source-map",
-	watch: process.env.NODE_ENV === 'development',
+	// watch: process.env.NODE_ENV === 'development',
 	watchOptions: {
 		ignored: /(node_modules|webpack)/
 	},
 	devServer: {
 		open: true,
-		contentBase: path.join(__dirname, 'dist'),
+		// static: {
+		// 	directory: path.join(__dirname, 'dist'),
+		// },
 		compress: true,
         allowedHosts: [
         	"localhost",
@@ -263,5 +266,13 @@ module.exports = {
     			changeOrigin: true,
 			}
         },
+		onListening: function (devServer) {
+			if (!devServer) {
+				throw new Error('webpack-dev-server is not defined');
+			}
+
+			const port = devServer.server.address().port;
+			console.log('Listening on port:', port);
+		},
 	}
 };
