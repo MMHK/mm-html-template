@@ -2,8 +2,66 @@ const webpack = require('webpack');
 const {globSync} = require("glob");
 const path = require("path");
 const fs = require("fs");
-const autoprefixer = require('autoprefixer');
-const log = require('debug')('fontmin-webpack')
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const frp = require("mmhk-frp");
+const inquirer = require('inquirer');
+const prompt = inquirer.createPromptModule();
+const http = require('http');
+
+const FRP_ENDPOINT = process.env.FRP_ENDPOINT || 'localhost';
+const FRP_ENDPOINT_PORT = process.env.FRP_ENDPOINT_PORT || 7000;
+const FRP_API_PORT = process.env.FRP_ENDPOINT_PORT || 7001;
+const FRP_API_USER = process.env.FRP_API_USER || 'admin';
+const FRP_API_PWD = process.env.FRP_API_PWD || 'admin';
+
+const checkSubDomainExist = (domain) => {
+	const auth = `${FRP_API_USER}:${FRP_API_PWD}`;
+
+	return new Promise((resolve, reject) => {
+		const req = http.get({
+			hostname: FRP_ENDPOINT,
+			port: FRP_API_PORT,
+			path: '/api/proxy/http',
+			headers: { 'Content-Type': 'application/json' },
+			auth: auth,
+		}, (resp) => {
+			resp.setEncoding('utf8');
+			let data = '';
+
+			// A chunk of data has been received.
+			resp.on('data', (chunk) => {
+				data += chunk;
+			});
+
+			// The whole response has been received. Print out the result.
+			resp.on('end', () => {
+				let json = {};
+				try {
+					json = JSON.parse(data);
+					resolve(json);
+				} catch (err) {
+					reject(err)
+				}
+			});
+
+		});
+		req.on('error', (err) => {
+			console.error(`http error: ${err}`);
+			reject(err);
+		});
+		req.end();
+	})
+		.then((data) => {
+			const list = Array.from(data.proxies || []);
+			if (list.find((row) => {
+				return row.name === domain && row.status === 'online';
+			})) {
+				return Promise.resolve(true);
+			}
+
+			return Promise.resolve(false);
+		})
+}
 
 /*
  * SplitChunksPlugin is enabled by default and replaced
@@ -21,7 +79,6 @@ const log = require('debug')('fontmin-webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 const FontminPlugin = require('./assets/webpack/fontmin-webpack.js');
 
@@ -53,14 +110,12 @@ const getFontmin = () => {
 	})
 };
 
-
-
-module.exports = {
+const config = {
 	mode: 'development',
 	entry: [
 		'./assets/default/main.js',
 		'./assets/static/style/main.scss'
-    ],
+	],
 
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -71,40 +126,27 @@ module.exports = {
 
 	resolve: {
 		alias: {
-			'vue$': (process.env.NODE_ENV === 'development' ? 
-			"vue/dist/vue.esm.js" : 
-			"vue/dist/vue.min.js"),
+			'vue$': (process.env.NODE_ENV === 'development' ?
+				"vue/dist/vue.esm.js" :
+				"vue/dist/vue.min.js"),
 		}
 	},
 
 	plugins: [new webpack.ProgressPlugin(),
 
-	new MiniCssExtractPlugin({
-		// Options similar to the same options in webpackOptions.output
-		// all options are optional
-		filename: 'css/[name].css',
-		// chunkFilename: 'css/[id].css',
-		ignoreOrder: false, // Enable to remove warnings about conflicting order
-	}),
+		new MiniCssExtractPlugin({
+			// Options similar to the same options in webpackOptions.output
+			// all options are optional
+			filename: 'css/[name].css',
+			// chunkFilename: 'css/[id].css',
+			ignoreOrder: false, // Enable to remove warnings about conflicting order
+		}),
 
-	new OptimizeCssnanoPlugin({
-		sourceMap: true,
-		cssnanoOptions: {
-			preset: [
-				'default',
-				{
-					mergeLonghand: false,
-					cssDeclarationSorter: false
-				}
-			]
-		}
-	}),
+		new CleanWebpackPlugin(),
 
-	new CleanWebpackPlugin(),
+		new VueLoaderPlugin(),
 
-	new VueLoaderPlugin(),
-
-	getFontmin(),
+		getFontmin(),
 
 	].concat(HTMlEntryList),
 
@@ -119,8 +161,8 @@ module.exports = {
 				include: [
 					path.resolve(__dirname, 'assets'),
 				],
-                exclude: /(node_modules|webpack)/,
-                use: [
+				exclude: /(node_modules|webpack)/,
+				use: [
 					{
 						loader: 'babel-loader',
 						options: {
@@ -146,7 +188,7 @@ module.exports = {
 						}
 					},
 				],
-				
+
 			},
 			{
 				test: /\.html$/,
@@ -241,6 +283,20 @@ module.exports = {
 			name: false
 		},
 
+		minimizer: [
+			new CssMinimizerPlugin({
+				minimizerOptions: {
+					preset: [
+						'default',
+						{
+							mergeLonghand: false,
+							cssDeclarationSorter: false
+						}
+					]
+				},
+			}),
+		],
+
 		minimize: process.env.NODE_ENV !== 'development',
 	},
 
@@ -255,24 +311,91 @@ module.exports = {
 		// 	directory: path.join(__dirname, 'dist'),
 		// },
 		compress: true,
-        allowedHosts: [
-        	"localhost",
+		allowedHosts: [
+			"localhost",
 			".demo2.mixmedia.com",
 		],
 		proxy: {
-            "/api": {
+			"/api": {
 				target: "https://baconipsum.com/api",
 				secure: false,
-    			changeOrigin: true,
+				changeOrigin: true,
 			}
-        },
-		onListening: function (devServer) {
-			if (!devServer) {
-				throw new Error('webpack-dev-server is not defined');
-			}
-
-			const port = devServer.server.address().port;
-			console.log('Listening on port:', port);
 		},
 	}
 };
+
+module.exports = prompt([
+	{
+		type: 'list',
+		name: 'public',
+		message: '请问是否允外网访问',
+		choices: [
+			{
+				name: "允许",
+				value: true
+			},
+			{
+				name: "不需要",
+				value: false
+			},
+		],
+	},
+	{
+		type: 'input',
+		name: 'subdomain',
+		message: '请配一个霸气的域名',
+		validate: (input) => {
+			return /^([a-z0-9\-]{4,})$/i.test(input);
+		},
+		when: ({public}) => {
+			return public;
+		}
+	},
+]).then(({public, subdomain}) => {
+	return Promise.resolve({
+		...config,
+		devServer: {
+			...config.devServer,
+			open: !public ? true : {
+				target: `http://${subdomain}.localhost`,
+			},
+			onListening: (devServer) => {
+				if (!devServer) {
+					throw new Error('webpack-dev-server is not defined');
+				}
+				if (!public) {
+					return;
+				}
+				const addr = devServer.server.address();
+
+				console.log('set domain:', subdomain);
+
+				checkSubDomainExist(subdomain)
+					.then((exist) => {
+						if (!exist) {
+							let conf = {
+									common: {
+										serverPort: FRP_ENDPOINT_PORT,
+										serverAddr: FRP_ENDPOINT,
+									},
+								};
+							conf[subdomain] = {
+								type: "http",
+								localIp: "127.0.0.1",
+								localPort: addr.port,
+								subdomain,
+							};
+
+							return frp.startClient(conf);
+						}
+						return Promise.reject(new Error('已经有人使用此霸气的名字'));
+					})
+					.catch((err) => {
+						console.error(err);
+						return Promise.reject(err);
+					})
+			},
+		}
+	})
+})
