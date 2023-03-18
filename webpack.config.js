@@ -13,6 +13,7 @@ const FRP_ENDPOINT_PORT = process.env.FRP_ENDPOINT_PORT || 7000;
 const FRP_API_PORT = process.env.FRP_ENDPOINT_PORT || 7001;
 const FRP_API_USER = process.env.FRP_API_USER || 'admin';
 const FRP_API_PWD = process.env.FRP_API_PWD || 'admin';
+const isDevServer = process.env.WEBPACK_DEV_SERVER;
 
 const checkSubDomainExist = (domain) => {
 	const auth = `${FRP_API_USER}:${FRP_API_PWD}`;
@@ -324,6 +325,11 @@ const config = {
 		},
 	}
 };
+
+if (!isDevServer) {
+	module.exports = config;
+	return;
+}
 
 module.exports = prompt([
 	{
