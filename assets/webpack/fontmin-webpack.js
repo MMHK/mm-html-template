@@ -43,6 +43,8 @@ class FontminPlugin {
         const regular = this.findRegularFontFiles(compilation)
         const extract = this.findExtractTextFontFiles(compilation)
 
+        // log("compilation.assets", compilation.assets);
+
         return _.uniqBy(regular.concat(extract), 'asset')
     }
 
@@ -50,14 +52,14 @@ class FontminPlugin {
         return _(Array.from(compilation.modules))
             .filter(module => this.hasFontAsset(module.buildInfo.assets))
             .map(module => {
-                const filename = Array.from(module.buildInfo?.fileDependencies || new Set())[0]
-
-                // log(module.buildInfo)
                 return _.keys(module.buildInfo.assets).map(asset => {
+                    const filename = module.buildInfo.assetsInfo.get(asset)?.sourceFilename || asset;
                     const buffer = module.buildInfo.assets[asset].source()
                     const extension = path.extname(asset)
-                    const font = path.basename(asset, path.extname(asset))
+                    const font = path.basename(filename, path.extname(filename))
                     return {asset, extension, font, buffer}
+                }).filter(asset => {
+                    return FONT_REGEX.test(asset.asset);
                 })
             })
             .flatten()
@@ -131,7 +133,7 @@ class FontminPlugin {
 
         const first = group[0];
 
-        // log('mergeAssetsAndFiles', first);
+        // log('mergeAssetsAndFiles', group);
 
         return _.map(byExtension, (item, extension) => {
                 // const isWoff2 = (extension === '.woff2');
@@ -144,7 +146,7 @@ class FontminPlugin {
                 const asset = first.asset.replace(first.extension, extension);
                 const font = first.font;
                 // log('mini out', {minified, asset, extension, font, buffer })
-                return {minified, asset, extension, font, buffer }
+                return {minified, asset, extension, font, buffer}
             });
 
     }
@@ -161,7 +163,7 @@ class FontminPlugin {
 
         if (ttfInfo.buffer.length <= (500 * 1024)) {
             log('TTF file <= 500K, skipping usedGlyphs...');
-            return Promise.resolve([])
+            _usedGlyphs = [];
         }
 
         const extensions = _.map(group, 'extension')
@@ -182,12 +184,12 @@ class FontminPlugin {
 
     async onAdditionalAssets(compilation) {
         const fontFiles = this.findFontFiles(compilation)
-
+        // log('fontFiles', fontFiles);
         const glyphsInCss = this.findUnicodeGlyphs(compilation)
-        log(`found ${glyphsInCss.length} glyphs in CSS`)
+        // log(`found ${glyphsInCss.length} glyphs in CSS`)
         const minifiableFonts = _(fontFiles).groupBy('font').values();
 
-        // console.log(minifiableFonts);
+        // log('minifiableFonts', _(fontFiles).groupBy('font'));
 
         const glyphs = await this.computeFinalGlyphs(glyphsInCss)
         await minifiableFonts.reduce((prev, group) => {
@@ -199,7 +201,12 @@ class FontminPlugin {
                     // log('after minifyFontGroup', files);
 
                     files.forEach(file => {
-                        compilation.assets[file.asset] = new RawSource(file.minified)
+                        if (compilation.assets[file.asset]) {
+                            compilation.assets[file.asset].buffer = file.minified;
+                        } else {
+                            compilation.assets[file.asset] = new RawSource(file.minified);
+                        }
+                        // log("minified", compilation.assets[file.asset]);
                     });
                     return Promise.resolve();
                 })

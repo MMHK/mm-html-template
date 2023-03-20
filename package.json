@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
-    "serve": "cross-env NODE_ENV=development webpack-dev-server",
+    "serve": "cross-env NODE_ENV=development FRP_ENDPOINT=192.168.33.6 FRP_PUBLIC_DOMAIN=dev.mixmedia.com webpack-dev-server",
     "test": "mocha"
   },
   "author": "Mixmedia",
@@ -38,6 +38,7 @@
     "mocha": "^10.2.0",
     "mocha-logger": "^1.0.6",
     "node-ssi": "^0.3.2",
+    "postcss-fontpath": "^1.0.0",
     "postcss-loader": "^7.1",
     "raw-loader": "^4.0.2",
     "sass": "^1.59",

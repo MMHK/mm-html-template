@@ -7,13 +7,15 @@ const frp = require("mmhk-frp");
 const inquirer = require('inquirer');
 const prompt = inquirer.createPromptModule();
 const http = require('http');
+const fontpath = require('postcss-fontpath');
 
 const FRP_ENDPOINT = process.env.FRP_ENDPOINT || 'localhost';
 const FRP_ENDPOINT_PORT = process.env.FRP_ENDPOINT_PORT || 7000;
 const FRP_API_PORT = process.env.FRP_ENDPOINT_PORT || 7001;
 const FRP_API_USER = process.env.FRP_API_USER || 'admin';
 const FRP_API_PWD = process.env.FRP_API_PWD || 'admin';
-const isDevServer = process.env.WEBPACK_DEV_SERVER;
+const FRP_PUBLIC_DOMAIN = process.env.FRP_PUBLIC_DOMAIN || 'localhost';
+const isDevServer = process.env.WEBPACK_DEV_SERVER || process.env.WEBPACK_SERVE;
 
 const checkSubDomainExist = (domain) => {
 	const auth = `${FRP_API_USER}:${FRP_API_PWD}`;
@@ -123,6 +125,7 @@ const config = {
 		chunkFilename: 'js/[name].js',
 		filename: 'js/[name].js',
 		assetModuleFilename: 'assets/[hash][ext][query]',
+		publicPath: "auto",
 	},
 
 	resolve: {
@@ -133,7 +136,8 @@ const config = {
 		}
 	},
 
-	plugins: [new webpack.ProgressPlugin(),
+	plugins: [
+		new webpack.ProgressPlugin(),
 
 		new MiniCssExtractPlugin({
 			// Options similar to the same options in webpackOptions.output
@@ -225,7 +229,15 @@ const config = {
 						options: {
 							postcssOptions: {
 								plugins: [
-									"autoprefixer",
+									["autoprefixer"],
+									fontpath({
+										formats: [
+											{ type: 'woff2', ext: 'woff2' },
+											{ type: 'embedded-opentype', ext: 'eot' },
+											{ type: 'woff', ext: 'woff' },
+											{ type: 'svg', ext: 'svg'},
+										],
+									}),
 								],
 							},
 							sourceMap: true,
@@ -246,8 +258,23 @@ const config = {
 				],
 			},
 			{
-				test: /\.(eot|svg|ttf|woff|woff2|png|jpe?g|gif)$/i,
+				test: /\.(eot|svg|ttf|woff|woff2)$/i,
 				type: 'asset',
+				generator: {
+					filename: 'assets/fonts/[hash][ext][query]'
+				},
+				parser: {
+					dataUrlCondition: {
+						maxSize: 4 * 1024 // 4kb
+					}
+				},
+			},
+			{
+				test: /\.(|png|jpe?g|gif)$/i,
+				type: 'asset',
+				generator: {
+					filename: 'assets/img/[hash][ext][query]'
+				},
 			},
 			{
 				test: require.resolve('jquery'),
@@ -280,7 +307,6 @@ const config = {
 
 			chunks: 'async',
 			minChunks: 1,
-			minSize: 30000,
 			name: false
 		},
 
@@ -363,9 +389,15 @@ module.exports = prompt([
 		...config,
 		devServer: {
 			...config.devServer,
-			open: !public ? true : {
-				target: `http://${subdomain}.localhost`,
+			client: !public ? {} : {
+				webSocketURL: `https://${subdomain}.${FRP_PUBLIC_DOMAIN}/ws`,
 			},
+			open: !public ? true : {
+				target: `https://${subdomain}.${FRP_PUBLIC_DOMAIN}`,
+			},
+			allowedHosts: [
+				`.${FRP_PUBLIC_DOMAIN}`,
+			],
 			onListening: (devServer) => {
 				if (!devServer) {
 					throw new Error('webpack-dev-server is not defined');
