@@ -55,12 +55,8 @@ scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 ```
 @font-face {
     font-family: "[FontName]";
-    src: url("../fonts/[FontName].eot"); /* IE9 */
-    src: url("../fonts/[FontName].eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-    url("../fonts/[FontName].woff") format("woff"), /* chrome, firefox */
-    url("../fonts/[FontName].woff2") format("woff2"), /* chrome, firefox */
-    url("../fonts/[FontName].ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-    url("../fonts/[FontName].svg#[FontName]") format("svg"); /* iOS 4.1- */
+    font-path: "../fonts/[FontName].ttf";
+    src: url("../fonts/[FontName].ttf") format("truetype"); 
     font-style: normal;
     font-weight: 400;
 }
@@ -68,9 +64,16 @@ scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
 其中 `assets/static/fonts/` 目录下**必需要准备好 font 的 `ttf` 文件**，`fontmin-webpack` 会自动将`ttf` 文件转换成其他格式的文件。
 如果 `ttf` 文件超过 500K，将会对font 进行裁剪（常见于中文font），裁剪字符集来自 `view` 目录下的所有的 `*.[html|shtml]`。
+而 `PostCSS` 的 `fontpath` plugin 会自动根据 `font-path`，补完其他 webfont 字型的定义。
 
 ## 项目打包
 
 - 执行编译命令 `npm run build`。
 
+## FRP 支持
 
+已经在 `webpack dev server` 集成对 `frp` 的支持，默认可以使用 prompt 提示，选择是否使用外网映射模式。 
+
+>
+> **注意**: 部分系统杀毒软件会将 `frp` 视为病毒，请 `install` 的时候注意操作信任
+> 
