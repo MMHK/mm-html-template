@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-let app = (()=>{
+const app = (()=>{
     var page_inited = false;
 
     return {

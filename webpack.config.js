@@ -116,7 +116,7 @@ const getFontmin = () => {
 const config = {
 	mode: 'development',
 	entry: [
-		'./assets/default/main.js',
+		'./assets/default/main.ts',
 		'./assets/static/style/main.scss'
 	],
 
@@ -129,11 +129,7 @@ const config = {
 	},
 
 	resolve: {
-		alias: {
-			'vue$': (process.env.NODE_ENV === 'development' ?
-				"vue/dist/vue.esm.js" :
-				"vue/dist/vue.min.js"),
-		}
+		extensions: ['.tsx', '.ts', '.js', '.vue'],
 	},
 
 	plugins: [
@@ -160,6 +156,19 @@ const config = {
 			{
 				test: /\.vue$/,
 				loader: 'vue-loader'
+			},
+			{
+				test: /\.ts$/,
+				use: [
+					{
+						loader: 'ts-loader',
+						options: {
+							// configFile: path.resolve(__dirname, 'tsconfig.json'),
+							appendTsSuffixTo: /\.vue$/,
+						},
+					}
+				],
+				exclude: /(node_modules)/,
 			},
 			{
 				test: /.(js)$/,
@@ -299,7 +308,7 @@ const config = {
 			// 	vendors: {
 			// 		name: 'vendor',
 			// 		chunks: 'initial',
-			// 		test: /node_modules/,
+			// 		tests: /node_modules/,
 			// 		priority: 10,
 			// 	}
 			// },

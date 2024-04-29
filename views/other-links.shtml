@@ -1,7 +1,0 @@
-<section class="other-links clearfix">
-    <ul>
-        <li><a href="home.html">Service Example</a></li>
-        <li><a href="vue.html">Vue Example</a></li>
-        <li><a href="amd.html">AMD Example</a></li>
-    </ul>
-</section>
