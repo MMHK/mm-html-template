@@ -70,6 +70,13 @@ scss看考请看：http://sass.bootcss.com/docs/scss-for-sass-users/
 
 - 执行编译命令 `npm run build`。
 
+### 項目依賴
+
+- [Vue 3.x](https://cn.vuejs.org/guide/introduction.html)
+- [Vue Router](https://router.vuejs.org/zh/guide/)
+- [buefy](https://buefy.org/documentation/start)
+- [bulma css](https://bulma.io/documentation/form/general/)
+
 ## FRP 支持
 
 已经在 `webpack dev server` 集成对 `frp` 的支持，默认可以使用 prompt 提示，选择是否使用外网映射模式。 
