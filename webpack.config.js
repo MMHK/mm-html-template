@@ -116,7 +116,7 @@ const getFontmin = () => {
 const config = {
 	mode: 'development',
 	entry: [
-		'./assets/default/main.ts',
+		'./assets/default/main.js',
 		'./assets/static/style/main.scss'
 	],
 
@@ -129,6 +129,9 @@ const config = {
 	},
 
 	resolve: {
+		alias: {
+			vue: "@vue/runtime-dom",
+		},
 		extensions: ['.tsx', '.ts', '.js', '.vue'],
 	},
 
@@ -147,28 +150,13 @@ const config = {
 
 		new VueLoaderPlugin(),
 
-		getFontmin(),
-
-	].concat(HTMlEntryList),
+	].concat(HTMlEntryList).concat(isDevServer ? [] : [getFontmin()]),
 
 	module: {
 		rules: [
 			{
 				test: /\.vue$/,
 				loader: 'vue-loader'
-			},
-			{
-				test: /\.ts$/,
-				use: [
-					{
-						loader: 'ts-loader',
-						options: {
-							// configFile: path.resolve(__dirname, 'tsconfig.json'),
-							appendTsSuffixTo: /\.vue$/,
-						},
-					}
-				],
-				exclude: /(node_modules)/,
 			},
 			{
 				test: /.(js)$/,
@@ -342,6 +330,7 @@ const config = {
 		ignored: /(node_modules|webpack)/
 	},
 	devServer: {
+		historyApiFallback: true,
 		open: true,
 		// static: {
 		// 	directory: path.join(__dirname, 'dist'),
@@ -358,7 +347,8 @@ const config = {
 				changeOrigin: true,
 			}
 		},
-	}
+	},
+	stats: isDevServer ? "normal" : "errors-warnings",
 };
 
 if (!isDevServer) {

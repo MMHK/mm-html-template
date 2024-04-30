@@ -1,7 +1,7 @@
 <template>
-  <div class="app wrap">
+  <div class="app">
       <div class="wrap">
-        <div class="container">
+        <div class="app container">
           <Header />
           <router-view/>
           <Footer />
@@ -24,3 +24,16 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="scss">
+.app {
+  background: linear-gradient(90deg, rgb(68, 55, 234), rgb(210, 176, 239));
+  min-height: 100vh;
+
+  &.container {
+    display: flex;
+    flex-direction: column;
+  }
+
+}
+</style>

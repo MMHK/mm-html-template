@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-let $section = $(".page-index section:first");
+let $section = $(".page-home section:first");
 
 $section.css({
     "overflow": "hidden",

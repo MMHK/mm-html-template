@@ -1,6 +1,6 @@
 <template>
   <header class="tc">
-    <a href="#">MM HTML Template</a>
+    <a href="#">Vue3 + Webpack</a>
   </header>
 </template>
 
@@ -11,3 +11,21 @@ export default defineComponent({
   name: "header"
 });
 </script>
+
+<style lang="scss">
+header.tc {
+  padding: rem(14px) 0;
+  text-align: center;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: rem(24px);
+  font-weight: 700;
+
+  background-color: #05053e;
+  color: white;
+
+  a {
+    color: white;
+  }
+}
+</style>

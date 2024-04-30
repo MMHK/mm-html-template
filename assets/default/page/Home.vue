@@ -1,8 +1,7 @@
 <template>
   <div class="wrap">
     <div class="container">
-      <!--# include file="header.shtml" -->
-      <main data-page="index" class="page-index">
+      <main data-page="index" class="page-home">
         <article>
           <h3>短歌行</h3>
           <p class="author">
@@ -21,7 +20,6 @@
           </section>
         </article>
       </main>
-      <!--# include file="footer.shtml" -->
     </div>
   </div>
 </template>
@@ -32,3 +30,36 @@ export default defineComponent({
   name: "Home.vue"
 });
 </script>
+
+<style lang="scss">
+.page-home {
+  min-height: rem(550px);
+  text-align: center;
+
+  font-family: "MSungHK", Arial, Helvetica, sans-serif;
+
+  line-height: 1.5;
+
+  color: white;
+
+  h3 {
+    padding: 0.5em 0;
+    font-size: 2em;
+  }
+
+  .author {
+    padding: 0.5em;
+    font-size: 0.8em;
+  }
+
+  section {
+    transition: all 0.5s ease;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-home {
+    font-size: rem(42px);
+  }
+}
+</style>
