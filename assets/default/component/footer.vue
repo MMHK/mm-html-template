@@ -1,5 +1,5 @@
 <template>
-  <footer class="tc">
+  <footer class="footer">
     {{ Year }} &copy; MixMedia
   </footer>
 
@@ -20,7 +20,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-footer {
+footer.footer {
   position: fixed;
   bottom: 0;
   width: 100%;

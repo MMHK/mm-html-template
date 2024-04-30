@@ -1,26 +1,24 @@
 <template>
-  <div class="app">
-      <div class="wrap">
-        <div class="app container">
-          <Header />
-          <router-view/>
-          <Footer />
-        </div>
-      </div>
-  </div>
+  <section class="app">
+    <AppHeader />
+    <div class="container">
+      <router-view/>
+    </div>
+    <AppFooter />
+  </section>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-import Header from "./component/header"
-import Footer from "./component/footer"
+import AppHeader from "./component/header"
+import AppFooter from "./component/footer"
 
 export default defineComponent({
   name: "App.vue",
 
   components: {
-    Header,
-    Footer,
+    AppHeader,
+    AppFooter,
   }
 });
 </script>
@@ -29,11 +27,11 @@ export default defineComponent({
 .app {
   background: linear-gradient(90deg, rgb(68, 55, 234), rgb(210, 176, 239));
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
-  &.container {
-    display: flex;
-    flex-direction: column;
+  > .container {
+    width: 100%;
   }
-
 }
 </style>

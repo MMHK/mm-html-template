@@ -1,6 +1,6 @@
 $desktop_layout_width: 1440;
 $mobile_layout_width: 640;
-$base_rem: 24px;
+$base_rem: 16px;
 
 @function d-vw($target) {
   $vw-context: ($desktop_layout_width*.01) * 1px;

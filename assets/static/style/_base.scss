@@ -23,10 +23,6 @@ main {
   margin: 0 auto;
 }
 
-.container {
-  width: 100%;
-}
-
 //* *************** */
 *{
   margin: 0;
@@ -100,14 +96,13 @@ ul {
   .mobile-view {
     display: block!important;
   }
-
-  .container {
-    font-size: rem(34px);
-  }
-
 }
 
 body {
     font-family: Helvetica, Arial, "MHeiHK", "PingFang HK", "SourceHanSansTWHK-Light", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
     -webkit-text-size-adjust: 100%;
+}
+
+.transparent {
+  background-color: transparent !important;
 }

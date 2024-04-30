@@ -130,7 +130,9 @@ const config = {
 
 	resolve: {
 		alias: {
-			vue: "@vue/runtime-dom",
+			'@': path.resolve(__dirname, 'assets'),
+			'vue$': "@vue/runtime-dom",
+			buefy: "@ntohq/buefy-next"
 		},
 		extensions: ['.tsx', '.ts', '.js', '.vue'],
 	},
@@ -150,13 +152,29 @@ const config = {
 
 		new VueLoaderPlugin(),
 
+		new webpack.DefinePlugin({
+			__VUE_OPTIONS_API__: 'true',
+			__VUE_PROD_DEVTOOLS__: isDevServer ? 'true' : 'false',
+			__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: isDevServer ? 'true' : 'false'
+		})
+
 	].concat(HTMlEntryList).concat(isDevServer ? [] : [getFontmin()]),
 
 	module: {
+		noParse: /^(vue|vue-router|vuex|vuex-router-sync)$/,
 		rules: [
 			{
 				test: /\.vue$/,
-				loader: 'vue-loader'
+				use: [
+					{
+						loader: 'vue-loader',
+						options: {
+							compilerOptions: {
+								whitespace: 'condense'
+							}
+						}
+					}
+				]
 			},
 			{
 				test: /.(js)$/,
